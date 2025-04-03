@@ -174,7 +174,9 @@
 <h1 id="problem1">Problem1</h1>
 <h1 id="investigating-the-range-as-a-function-of-the-angle-of-projection">Investigating the Range as a Function of the Angle of Projection</h1>
 <h2 id="1-introduction"><strong>1. Introduction</strong></h2>
-<p>Projectile motion is a fundamental concept in physics, describing the motion of an object launched into the air under the influence of gravity. This study explores how the range of a projectile depends on its angle of projection, analyzing the governing equations and simulating various scenarios to derive insights into its behavior. Understanding these principles has practical applications in fields such as sports, engineering, and aerospace.</p>
+<p>Projectile motion is a fundamental concept in physics, describing the motion of an object launched into the air under the influence of gravity. This study explores how the range of a projectile depends on its angle of projection, analyzing the governing equations and simulating various scenarios to derive insights into its behavior. Understanding these principles has practical applications in fields such as sports, engineering, and aerospace
+<img alt="alt text" src="../image-15.png"/>
+<em>This figure illustrates projectile motion. Red arrows indicate horizontal velocity, green arrows show vertical velocity. Maximum height and range are labeled.</em></p>
 <h2 id="2-motivation"><strong>2. Motivation</strong></h2>
 <p>Projectile motion is not only a fundamental topic in physics but also an essential component in real-world applications. From sports science to military engineering, the ability to predict and manipulate projectile trajectories is crucial. Analyzing the range as a function of the launch angle offers an intuitive yet mathematically rich problem that encapsulates both linear and quadratic relationships. Furthermore, varying initial conditions introduces a wide spectrum of solutions that enhance our understanding of motion in a gravitational field.</p>
 <h2 id="3-theoretical-foundation"><strong>3. Theoretical Foundation</strong></h2>
@@ -188,15 +190,15 @@ v_{0y} = v_0 \sin \theta
 \]</p>
 <p>The horizontal and vertical motions are analyzed separately:</p>
 <ul>
-<li>
-<p><strong>Horizontal Motion:</strong><br/>
+<li><strong>Horizontal Motion:</strong><br/>
 \[
 x = v_{0x} t = v_0 \cos \theta \cdot t
 \]<br/>
-Since there is no acceleration in the horizontal direction (assuming no air resistance), motion remains uniform.</p>
-</li>
-<li>
-<p><strong>Vertical Motion:</strong><br/>
+Since there is no acceleration in the horizontal direction (assuming no air resistance), motion remains uniform.</li>
+</ul>
+<p><img alt="alt text" src="../image-16.png"/>
+These graphs show the projectile trajectory (left) and the horizontal displacement over time (right).
+- <strong>Vertical Motion:</strong><br/>
 The vertical motion is influenced by gravity <span class="arithmatex">\( g \)</span>, with acceleration <span class="arithmatex">\( -g \)</span>:<br/>
 \[
 y = v_{0y} t - \frac{1}{2} g t^2
@@ -205,9 +207,9 @@ The time of flight <span class="arithmatex">\( T \)</span> can be determined by 
 \[
 T = \frac{2 v_0 \sin \theta}{g}
 \]</p>
-</li>
-<li>
-<p><strong>Range Equation:</strong><br/>
+<p><img alt="alt text" src="../image-17.png"/>
+These graphs show the vertical position over time (left) and the vertical velocity affected by gravity (right).
+- <strong>Range Equation:</strong><br/>
 The range <span class="arithmatex">\( R \)</span> is the horizontal distance traveled during flight:<br/>
 \[
 R = v_{0x} T = v_0 \cos \theta \cdot \frac{2 v_0 \sin \theta}{g}
@@ -216,13 +218,21 @@ Using the identity <span class="arithmatex">\( 2 \sin \theta \cos \theta = \sin 
 \[
 R = \frac{v_0^2 \sin 2\theta}{g}
 \]</p>
-</li>
-</ul>
+<p><img alt="alt text" src="../image-18.png"/>
+This graph shows how the launch angle affects the total range of the projectile.<br/>
+Maximum range of <strong>63.71 meters</strong> is achieved at a launch angle of <strong>45°</strong>.</p>
 <h3 id="32-influence-of-initial-conditions"><strong>3.2 Influence of Initial Conditions</strong></h3>
 <ul>
 <li><strong>Initial Velocity <span class="arithmatex">\( v_0 \)</span></strong>: Increasing <span class="arithmatex">\( v_0 \)</span> results in a larger range since <span class="arithmatex">\( R \propto v_0^2 \)</span>.</li>
 <li><strong>Angle <span class="arithmatex">\( \theta \)</span></strong>: The range is maximized at <span class="arithmatex">\( \theta = 45^\circ \)</span>, as <span class="arithmatex">\( \sin 2\theta \)</span> is maximized at this value.</li>
 <li><strong>Gravitational Acceleration <span class="arithmatex">\( g \)</span></strong>: A higher <span class="arithmatex">\( g \)</span> decreases the range since <span class="arithmatex">\( R \propto \frac{1}{g} \)</span>.</li>
+</ul>
+<p><img alt="alt text" src="../image-20.png"/>
+These graphs demonstrate how the projectile range is influenced by each of the initial conditions:</p>
+<ul>
+<li>The left graph shows that increasing the initial velocity <span class="arithmatex">\( v_0 \)</span> results in a quadratic increase in range, consistent with <span class="arithmatex">\( R \propto v_0^2 \)</span>.</li>
+<li>The center graph confirms that the optimal launch angle is <span class="arithmatex">\( 45^\circ \)</span>, where <span class="arithmatex">\( \sin 2\theta \)</span> is maximized.</li>
+<li>The right graph illustrates the inverse relationship between gravitational acceleration <span class="arithmatex">\( g \)</span> and range, as expected from <span class="arithmatex">\( R \propto \frac{1}{g} \)</span>.</li>
 </ul>
 <h2 id="4-analysis-of-the-range"><strong>4. Analysis of the Range</strong></h2>
 <p>We simulate projectile motion for different angles and analyze how the range changes. Below is the Python implementation that computes and plots the range as a function of angle.</p>
@@ -253,11 +263,15 @@ plt.show()
 <li>Symmetry: The range for <span class="arithmatex">\( \theta \)</span> and <span class="arithmatex">\( 90^\circ - \theta \)</span> is the same.</li>
 <li>Higher initial velocity shifts the curve upward, increasing the range.</li>
 </ul>
+<p><img alt="alt text" src="../Range_Symmetry_Graph-2.png"/>
+This graph illustrates the effect of launch angle on the projectile range.<br/>
+It clearly shows that the range is maximized at <span class="arithmatex">\( 45^\circ \)</span>, and that there is symmetry between complementary angles such as <span class="arithmatex">\( 30^\circ \)</span> and <span class="arithmatex">\( 60^\circ \)</span>, which result in the same range.</p>
 <h2 id="5-practical-applications"><strong>5. Practical Applications</strong></h2>
 <p>This model is used in various real-world scenarios:
 - <strong>Sports Science</strong>: Optimizing angles for long jumps, soccer kicks, or basketball shots.
 - <strong>Engineering</strong>: Missile and rocket trajectory predictions.
 - <strong>Astrophysics</strong>: Predicting planetary motion and interstellar object trajectories.</p>
+<p><img alt="alt text" src="../image-21.png"/></p>
 <h3 id="limitations-and-extensions"><strong>Limitations and Extensions</strong></h3>
 <ul>
 <li><strong>Air Resistance</strong>: Real-world projectiles experience drag, altering trajectories.</li>

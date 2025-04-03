@@ -1,4 +1,4 @@
-
+# Problem 2
 # Investigating the Dynamics of a Forced Damped Pendulum
 
 ## Introduction and Motivation
@@ -24,7 +24,7 @@ Where:
 ( A ) is the amplitude of the driving force  
 ( ω ) is the driving frequence 
 
-![alt text](image-25.png)
+![alt text](image-1.png)
 
 Free body diagram of a forced damped pendulum. The diagram illustrates all forces acting on the mass, including gravity (mg), damping (−γθ̇), external driving force (A·cos(ω·t)), and tension along the string. Angular displacement θ and string length L are also indicated.
 
@@ -44,7 +44,8 @@ For small angular displacements, ( \sin(\theta) \approx \theta ), simplifying th
 
 (d²θ/dt²) + γ·(dθ/dt) + ω₀²·θ = A·cos(ω·t)
 
-![alt text](image-26.png)
+![alt text](image-2.png)
+
 This graph shows the comparison between $\theta$ and $\sin(\theta)$ for small angular displacements. For values of $\theta$ less than about 0.5 radians, both curves nearly overlap, demonstrating the validity of the small-angle approximation: $\sin(\theta) \approx \theta$.
 
 This is a linear non-homogeneous second-order ODE. The solution includes a transient and steady-state component, with the steady-state given by:
@@ -60,7 +61,7 @@ Where:
 ### 1.3 Resonance and Energy Transfer
 Resonance occurs when ( ω ≈ ω₀ ), leading to a peak in amplitude ( Θ ). At resonance, energy transfer from the driving force is maximized, which is critical in mechanical and electrical systems alike.
 
-![alt text](image-27.png)
+![alt text](image-3.png)
 
 As seen in the graph, the amplitude reaches its maximum near the natural frequency ( ω₀ = 1.0 ), demonstrating resonance. At this point, the energy transfer from the driving force is most efficient.
 
@@ -75,7 +76,7 @@ Increasing the damping coefficient ( γ ) would reduce and broaden the peak, mak
 
 - **Driving Frequency ( ω )**: Controls resonance behavior; near-resonance leads to large oscillations, while mismatched frequencies result in minimal response.
 
-![alt text](image-28.png)
+![alt text](image-4.png)
 
 
 ### 2.2 Regular vs. Chaotic Behavior
@@ -87,7 +88,7 @@ We distinguish:
 - **Quasiperiodic motion**: Multiple incommensurate frequencies.
 - **Chaotic motion**: Non-repeating, sensitive to initial conditions.
 
-![poincare_sections_comparison.png](image-10.png)
+![alt text](image-5.png)
 
 *Figure: Time series of θ(t) for three different dynamical regimes. The left panel shows periodic motion, the middle one shows quasiperiodic behavior, and the right panel shows chaotic dynamics.*
 
@@ -151,11 +152,11 @@ Key visualizations include:
 - **Poincaré sections**: Sampling the system at intervals of ( 2π / ω )
 - **Bifurcation diagrams**: Mapping final state as a function of ( A ) or ( ω )
 
-![alt text](image-30.png)
+![alt text](image-6.png)
 
 This visualization shows the relationship between θ (angular displacement) and ẋ (angular velocity).
 
-![alt text](image-31.png)
+![alt text](image-7.png)
 
 This visualization samples the system at regular intervals to analyze its chaotic behavior.
 
@@ -195,19 +196,19 @@ plt.show()
 ### Limitations
 - **Small-angle approximation** fails for large angles.
 
-![alt text](image-33.png)
-T
-his graph compares the small-angle approximation (sin(θ) ≈ θ) with the actual sine function (sin(θ)) for larger angles. The orange dashed line represents the small-angle approximation, which is valid only for small angles, while the blue line represents the true sin(θ) function. The discrepancy becomes more apparent as the angle increases beyond approximately 0.5 radians.
+![alt text](image-8.png)
+
+This graph compares the small-angle approximation (sin(θ) ≈ θ) with the actual sine function (sin(θ)) for larger angles. The orange dashed line represents the small-angle approximation, which is valid only for small angles, while the blue line represents the true sin(θ) function. The discrepancy becomes more apparent as the angle increases beyond approximately 0.5 radians.
 
 - **Linear damping** may not capture real-world friction.
 
-![alt text](image-34.png)
+![alt text](image-9.png)
 
 This graph compares linear damping (γ · θ̇) with real-world friction, which is typically nonlinear and proportional to the square of velocity (v²). The blue line represents linear damping, while the red line shows nonlinear friction. The graph illustrates how real-world friction increases more rapidly with velocity than linear damping.
 
 - **Harmonic driving** oversimplifies non-periodic influences.
 
-![alt text](image-35.png)
+![alt text](image-10.png)
 
 This graph compares harmonic driving force (cos(ω t)) with non-periodic driving forces, represented by random noise. The green line represents the periodic, harmonic force, while the orange line represents the non-periodic, random driving force. The graph highlights the difference between regular oscillations and irregular, random inputs in forced systems.
 
@@ -217,18 +218,18 @@ This graph compares harmonic driving force (cos(ω t)) with non-periodic driving
 ### Extensions
 - **Nonlinear damping**: e.g., quadratic velocity terms.
 
-![alt text](image-36.png)
+![alt text](image-11.png)
 
 This graph shows the difference between linear damping (orange line) and nonlinear damping (blue dashed line). Nonlinear damping increases rapidly, while linear damping grows linearly with angular velocity (ω).
 
 - **Stochastic forcing**: To simulate random environmental inputs.
 
-![alt text](image-37.png)
+![alt text](image-12.png)
 
 This graph compares harmonic driving force (light blue line) with non-periodic driving force (orange line). The harmonic force follows a regular oscillatory pattern, while the non-periodic force introduces irregular fluctuations, simulating random environmental inputs.
 
 - **Coupled pendula**: Network behavior and synchronization.
 
-![alt text](image-38.png)
+![alt text](image-13.png)
 
 This graph shows the synchronized motion of two coupled pendula. The blue line represents Pendulum 1 (θ₁), while the red line represents Pendulum 2 (θ₂). Both pendulums exhibit synchronized oscillations, highlighting the concept of synchronization and network behavior in coupled systems.

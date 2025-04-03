@@ -24,7 +24,7 @@ Where:
 ( A ) is the amplitude of the driving force  
 ( ω ) is the driving frequence 
 
-![Free body diagram of a forced damped pendulum](image-12.png)
+![alt text](image-25.png)
 
 Free body diagram of a forced damped pendulum. The diagram illustrates all forces acting on the mass, including gravity (mg), damping (−γθ̇), external driving force (A·cos(ω·t)), and tension along the string. Angular displacement θ and string length L are also indicated.
 
@@ -44,7 +44,7 @@ For small angular displacements, ( \sin(\theta) \approx \theta ), simplifying th
 
 (d²θ/dt²) + γ·(dθ/dt) + ω₀²·θ = A·cos(ω·t)
 
-![Comparison of θ and sin(θ) for small angles](image-13.png)
+![alt text](image-26.png)
 This graph shows the comparison between $\theta$ and $\sin(\theta)$ for small angular displacements. For values of $\theta$ less than about 0.5 radians, both curves nearly overlap, demonstrating the validity of the small-angle approximation: $\sin(\theta) \approx \theta$.
 
 This is a linear non-homogeneous second-order ODE. The solution includes a transient and steady-state component, with the steady-state given by:
@@ -60,19 +60,11 @@ Where:
 ### 1.3 Resonance and Energy Transfer
 Resonance occurs when ( ω ≈ ω₀ ), leading to a peak in amplitude ( Θ ). At resonance, energy transfer from the driving force is maximized, which is critical in mechanical and electrical systems alike.
 
-![alt text](image-9.png)
+![alt text](image-27.png)
 
 As seen in the graph, the amplitude reaches its maximum near the natural frequency ( ω₀ = 1.0 ), demonstrating resonance. At this point, the energy transfer from the driving force is most efficient.
 
 Increasing the damping coefficient ( γ ) would reduce and broaden the peak, making the system less responsive to resonance. This effect is critical in engineering applications where resonance can either be beneficial or dangerous.
-
-
-
-
-
-
-
----
 
 ## 2. Analysis of Dynamics
 
@@ -83,7 +75,7 @@ Increasing the damping coefficient ( γ ) would reduce and broaden the peak, mak
 
 - **Driving Frequency ( ω )**: Controls resonance behavior; near-resonance leads to large oscillations, while mismatched frequencies result in minimal response.
 
-![Effects of Damping Coefficient, Driving Amplitude, and Frequency on Resonance](image-14.png)
+![alt text](image-28.png)
 
 
 ### 2.2 Regular vs. Chaotic Behavior
@@ -159,10 +151,12 @@ Key visualizations include:
 - **Poincaré sections**: Sampling the system at intervals of ( 2π / ω )
 - **Bifurcation diagrams**: Mapping final state as a function of ( A ) or ( ω )
 
-![Phase Portrait - Forced Damped Pendulum](image-15.png)
+![alt text](image-30.png)
+
 This visualization shows the relationship between θ (angular displacement) and ẋ (angular velocity).
 
-![Poincaré Section - Forced Damped Pendulum](image-16.png)
+![alt text](image-31.png)
+
 This visualization samples the system at regular intervals to analyze its chaotic behavior.
 
 
@@ -201,17 +195,20 @@ plt.show()
 ### Limitations
 - **Small-angle approximation** fails for large angles.
 
-![Small-Angle Approximation vs Large Angles](image-17.png)
-This graph compares the small-angle approximation (sin(θ) ≈ θ) with the actual sine function (sin(θ)) for larger angles. The orange dashed line represents the small-angle approximation, which is valid only for small angles, while the blue line represents the true sin(θ) function. The discrepancy becomes more apparent as the angle increases beyond approximately 0.5 radians.
+![alt text](image-33.png)
+T
+his graph compares the small-angle approximation (sin(θ) ≈ θ) with the actual sine function (sin(θ)) for larger angles. The orange dashed line represents the small-angle approximation, which is valid only for small angles, while the blue line represents the true sin(θ) function. The discrepancy becomes more apparent as the angle increases beyond approximately 0.5 radians.
 
 - **Linear damping** may not capture real-world friction.
 
-![Linear Damping vs Real-World Friction](image-18.png)
+![alt text](image-34.png)
+
 This graph compares linear damping (γ · θ̇) with real-world friction, which is typically nonlinear and proportional to the square of velocity (v²). The blue line represents linear damping, while the red line shows nonlinear friction. The graph illustrates how real-world friction increases more rapidly with velocity than linear damping.
 
 - **Harmonic driving** oversimplifies non-periodic influences.
 
-![Harmonic Driving vs Non-Periodic Influences](image-19.png)
+![alt text](image-35.png)
+
 This graph compares harmonic driving force (cos(ω t)) with non-periodic driving forces, represented by random noise. The green line represents the periodic, harmonic force, while the orange line represents the non-periodic, random driving force. The graph highlights the difference between regular oscillations and irregular, random inputs in forced systems.
 
 
@@ -220,16 +217,18 @@ This graph compares harmonic driving force (cos(ω t)) with non-periodic driving
 ### Extensions
 - **Nonlinear damping**: e.g., quadratic velocity terms.
 
-![Comparison of Linear and Nonlinear Damping with Enhanced Visualization](image-20.png)
+![alt text](image-36.png)
+
 This graph shows the difference between linear damping (orange line) and nonlinear damping (blue dashed line). Nonlinear damping increases rapidly, while linear damping grows linearly with angular velocity (ω).
 
 - **Stochastic forcing**: To simulate random environmental inputs.
 
-![Comparison of Harmonic Driving vs Non-periodic Forces](image-21.png)
+![alt text](image-37.png)
 
 This graph compares harmonic driving force (light blue line) with non-periodic driving force (orange line). The harmonic force follows a regular oscillatory pattern, while the non-periodic force introduces irregular fluctuations, simulating random environmental inputs.
 
 - **Coupled pendula**: Network behavior and synchronization.
 
-![Coupled Pendula - Synchronization and Network Behavior](image-22.png)
+![alt text](image-38.png)
+
 This graph shows the synchronized motion of two coupled pendula. The blue line represents Pendulum 1 (θ₁), while the red line represents Pendulum 2 (θ₂). Both pendulums exhibit synchronized oscillations, highlighting the concept of synchronization and network behavior in coupled systems.

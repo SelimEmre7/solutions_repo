@@ -23,11 +23,8 @@ Where:
 ( ω₀ ) is the natural frequency (( ω₀ = √(g/L) ))  
 ( A ) is the amplitude of the driving force  
 ( ω ) is the driving frequence 
-
-![alt text](image-1.png)
-
+![alt text](image-22.png)
 Free body diagram of a forced damped pendulum. The diagram illustrates all forces acting on the mass, including gravity (mg), damping (−γθ̇), external driving force (A·cos(ω·t)), and tension along the string. Angular displacement θ and string length L are also indicated.
-
 
 ## Where:
 

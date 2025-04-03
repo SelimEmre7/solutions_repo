@@ -6,13 +6,13 @@
 <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <link href="../../../img/favicon.ico" rel="shortcut icon"/>
-<title>Investigating the Dynamics of a Forced Damped Pendulum - Physics and Mathematics</title>
+<title>Problem 2 - Physics and Mathematics</title>
 <link href="../../../css/theme.css" rel="stylesheet"/>
 <link href="../../../css/theme_extra.css" rel="stylesheet"/>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" rel="stylesheet"/>
 <script>
         // Current page data
-        var mkdocs_page_name = "Investigating the Dynamics of a Forced Damped Pendulum";
+        var mkdocs_page_name = "Problem 2";
         var mkdocs_page_input_path = "1 Physics/1 Mechanics/Problem_2.md";
         var mkdocs_page_url = null;
       </script>
@@ -48,52 +48,8 @@
 <ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../Problem_1/">Problem 1</a>
 </li>
-<li class="toctree-l2 current"><a class="reference internal current" href="#">Investigating the Dynamics of a Forced Damped Pendulum</a>
+<li class="toctree-l2 current"><a class="reference internal current" href="#">Problem 2</a>
 <ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="#introduction-and-motivation">Introduction and Motivation</a>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="#1-theoretical-foundation">1. Theoretical Foundation</a>
-<ul>
-<li class="toctree-l4"><a class="reference internal" href="#11-governing-equation">1.1 Governing Equation</a>
-</li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="#where">Where:</a>
-<ul>
-<li class="toctree-l4"><a class="reference internal" href="#12-small-angle-approximation">1.2 Small-Angle Approximation</a>
-</li>
-<li class="toctree-l4"><a class="reference internal" href="#13-resonance-and-energy-transfer">1.3 Resonance and Energy Transfer</a>
-</li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="#2-analysis-of-dynamics">2. Analysis of Dynamics</a>
-<ul>
-<li class="toctree-l4"><a class="reference internal" href="#21-influence-of-parameters">2.1 Influence of Parameters</a>
-</li>
-<li class="toctree-l4"><a class="reference internal" href="#22-regular-vs-chaotic-behavior">2.2 Regular vs. Chaotic Behavior</a>
-</li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="#3-practical-applications">3. Practical Applications</a>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="#4-computational-implementation">4. Computational Implementation</a>
-<ul>
-<li class="toctree-l4"><a class="reference internal" href="#41-simulation-code">4.1 Simulation Code</a>
-</li>
-<li class="toctree-l4"><a class="reference internal" href="#42-visualizations">4.2 Visualizations</a>
-</li>
-<li class="toctree-l4"><a class="reference internal" href="#43-phase-diagrams-poincare-sections">4.3 Phase Diagrams &amp; Poincaré Sections</a>
-</li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="#5-limitations-and-extensions">5. Limitations and Extensions</a>
-<ul>
-<li class="toctree-l4"><a class="reference internal" href="#limitations">Limitations</a>
-</li>
-<li class="toctree-l4"><a class="reference internal" href="#extensions">Extensions</a>
-</li>
-</ul>
-</li>
 </ul>
 </li>
 </ul>
@@ -207,7 +163,7 @@
 <li><a aria-label="Docs" class="icon icon-home" href="../../.."></a></li>
 <li class="breadcrumb-item">1 Physics</li>
 <li class="breadcrumb-item">1 Mechanics</li>
-<li class="breadcrumb-item active">Investigating the Dynamics of a Forced Damped Pendulum</li>
+<li class="breadcrumb-item active">Problem 2</li>
 <li class="wy-breadcrumbs-aside">
 </li>
 </ul>
@@ -215,6 +171,7 @@
 </div>
 <div class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
 <div class="section" itemprop="articleBody">
+<h1 id="problem-2">Problem 2</h1>
 <h1 id="investigating-the-dynamics-of-a-forced-damped-pendulum">Investigating the Dynamics of a Forced Damped Pendulum</h1>
 <h2 id="introduction-and-motivation">Introduction and Motivation</h2>
 <p>The forced damped pendulum exemplifies a rich dynamical system where nonlinear behavior arises from the interplay between gravitational restoring forces, frictional damping, and external periodic driving. This model is a foundation for understanding complex real-world phenomena such as resonance, synchronization, and chaos.</p>
@@ -230,7 +187,7 @@
 ( ω₀ ) is the natural frequency (( ω₀ = √(g/L) ))<br/>
 ( A ) is the amplitude of the driving force<br/>
 ( ω ) is the driving frequence </p>
-<p><img alt="alt text" src="../image-25.png"/></p>
+<p><img alt="alt text" src="../image-1.png"/></p>
 <p>Free body diagram of a forced damped pendulum. The diagram illustrates all forces acting on the mass, including gravity (mg), damping (−γθ̇), external driving force (A·cos(ω·t)), and tension along the string. Angular displacement θ and string length L are also indicated.</p>
 <h2 id="where">Where:</h2>
 <ul>
@@ -243,8 +200,8 @@
 <h3 id="12-small-angle-approximation">1.2 Small-Angle Approximation</h3>
 <p>For small angular displacements, ( \sin(\theta) \approx \theta ), simplifying the equation to:</p>
 <p>(d²θ/dt²) + γ·(dθ/dt) + ω₀²·θ = A·cos(ω·t)</p>
-<p><img alt="alt text" src="../image-26.png"/>
-This graph shows the comparison between <span class="arithmatex">\(\theta\)</span> and <span class="arithmatex">\(\sin(\theta)\)</span> for small angular displacements. For values of <span class="arithmatex">\(\theta\)</span> less than about 0.5 radians, both curves nearly overlap, demonstrating the validity of the small-angle approximation: <span class="arithmatex">\(\sin(\theta) \approx \theta\)</span>.</p>
+<p><img alt="alt text" src="../image-2.png"/></p>
+<p>This graph shows the comparison between <span class="arithmatex">\(\theta\)</span> and <span class="arithmatex">\(\sin(\theta)\)</span> for small angular displacements. For values of <span class="arithmatex">\(\theta\)</span> less than about 0.5 radians, both curves nearly overlap, demonstrating the validity of the small-angle approximation: <span class="arithmatex">\(\sin(\theta) \approx \theta\)</span>.</p>
 <p>This is a linear non-homogeneous second-order ODE. The solution includes a transient and steady-state component, with the steady-state given by:</p>
 <p>θ(t) = Θ·cos(ω·t − δ)</p>
 <p>Where:</p>
@@ -252,7 +209,7 @@ This graph shows the comparison between <span class="arithmatex">\(\theta\)</spa
 ( δ = tan⁻¹(γ·ω / (ω₀² − ω²)) )</p>
 <h3 id="13-resonance-and-energy-transfer">1.3 Resonance and Energy Transfer</h3>
 <p>Resonance occurs when ( ω ≈ ω₀ ), leading to a peak in amplitude ( Θ ). At resonance, energy transfer from the driving force is maximized, which is critical in mechanical and electrical systems alike.</p>
-<p><img alt="alt text" src="../image-27.png"/></p>
+<p><img alt="alt text" src="../image-3.png"/></p>
 <p>As seen in the graph, the amplitude reaches its maximum near the natural frequency ( ω₀ = 1.0 ), demonstrating resonance. At this point, the energy transfer from the driving force is most efficient.</p>
 <p>Increasing the damping coefficient ( γ ) would reduce and broaden the peak, making the system less responsive to resonance. This effect is critical in engineering applications where resonance can either be beneficial or dangerous.</p>
 <h2 id="2-analysis-of-dynamics">2. Analysis of Dynamics</h2>
@@ -268,7 +225,7 @@ This graph shows the comparison between <span class="arithmatex">\(\theta\)</spa
 <p><strong>Driving Frequency ( ω )</strong>: Controls resonance behavior; near-resonance leads to large oscillations, while mismatched frequencies result in minimal response.</p>
 </li>
 </ul>
-<p><img alt="alt text" src="../image-28.png"/></p>
+<p><img alt="alt text" src="../image-4.png"/></p>
 <h3 id="22-regular-vs-chaotic-behavior">2.2 Regular vs. Chaotic Behavior</h3>
 <p>For large ( A ) and intermediate ( γ ), the pendulum may exhibit chaotic behavior. This is marked by sensitive dependence on initial conditions and aperiodic trajectories.</p>
 <p>We distinguish:</p>
@@ -277,7 +234,7 @@ This graph shows the comparison between <span class="arithmatex">\(\theta\)</spa
 <li><strong>Quasiperiodic motion</strong>: Multiple incommensurate frequencies.</li>
 <li><strong>Chaotic motion</strong>: Non-repeating, sensitive to initial conditions.</li>
 </ul>
-<p><img alt="poincare_sections_comparison.png" src="../image-10.png"/></p>
+<p><img alt="alt text" src="../image-5.png"/></p>
 <p><em>Figure: Time series of θ(t) for three different dynamical regimes. The left panel shows periodic motion, the middle one shows quasiperiodic behavior, and the right panel shows chaotic dynamics.</em></p>
 <hr/>
 <h2 id="3-practical-applications">3. Practical Applications</h2>
@@ -333,9 +290,9 @@ plt.show()
 <li><strong>Poincaré sections</strong>: Sampling the system at intervals of ( 2π / ω )</li>
 <li><strong>Bifurcation diagrams</strong>: Mapping final state as a function of ( A ) or ( ω )</li>
 </ul>
-<p><img alt="alt text" src="../image-30.png"/></p>
+<p><img alt="alt text" src="../image-6.png"/></p>
 <p>This visualization shows the relationship between θ (angular displacement) and ẋ (angular velocity).</p>
-<p><img alt="alt text" src="../image-31.png"/></p>
+<p><img alt="alt text" src="../image-7.png"/></p>
 <p>This visualization samples the system at regular intervals to analyze its chaotic behavior.</p>
 <h3 id="43-phase-diagrams-poincare-sections">4.3 Phase Diagrams &amp; Poincaré Sections</h3>
 <p>These visual tools highlight the system's transition from order to chaos.</p>
@@ -367,34 +324,33 @@ plt.show()
 <ul>
 <li><strong>Small-angle approximation</strong> fails for large angles.</li>
 </ul>
-<p><img alt="alt text" src="../image-33.png"/>
-T
-his graph compares the small-angle approximation (sin(θ) ≈ θ) with the actual sine function (sin(θ)) for larger angles. The orange dashed line represents the small-angle approximation, which is valid only for small angles, while the blue line represents the true sin(θ) function. The discrepancy becomes more apparent as the angle increases beyond approximately 0.5 radians.</p>
+<p><img alt="alt text" src="../image-8.png"/></p>
+<p>This graph compares the small-angle approximation (sin(θ) ≈ θ) with the actual sine function (sin(θ)) for larger angles. The orange dashed line represents the small-angle approximation, which is valid only for small angles, while the blue line represents the true sin(θ) function. The discrepancy becomes more apparent as the angle increases beyond approximately 0.5 radians.</p>
 <ul>
 <li><strong>Linear damping</strong> may not capture real-world friction.</li>
 </ul>
-<p><img alt="alt text" src="../image-34.png"/></p>
+<p><img alt="alt text" src="../image-9.png"/></p>
 <p>This graph compares linear damping (γ · θ̇) with real-world friction, which is typically nonlinear and proportional to the square of velocity (v²). The blue line represents linear damping, while the red line shows nonlinear friction. The graph illustrates how real-world friction increases more rapidly with velocity than linear damping.</p>
 <ul>
 <li><strong>Harmonic driving</strong> oversimplifies non-periodic influences.</li>
 </ul>
-<p><img alt="alt text" src="../image-35.png"/></p>
+<p><img alt="alt text" src="../image-10.png"/></p>
 <p>This graph compares harmonic driving force (cos(ω t)) with non-periodic driving forces, represented by random noise. The green line represents the periodic, harmonic force, while the orange line represents the non-periodic, random driving force. The graph highlights the difference between regular oscillations and irregular, random inputs in forced systems.</p>
 <h3 id="extensions">Extensions</h3>
 <ul>
 <li><strong>Nonlinear damping</strong>: e.g., quadratic velocity terms.</li>
 </ul>
-<p><img alt="alt text" src="../image-36.png"/></p>
+<p><img alt="alt text" src="../image-11.png"/></p>
 <p>This graph shows the difference between linear damping (orange line) and nonlinear damping (blue dashed line). Nonlinear damping increases rapidly, while linear damping grows linearly with angular velocity (ω).</p>
 <ul>
 <li><strong>Stochastic forcing</strong>: To simulate random environmental inputs.</li>
 </ul>
-<p><img alt="alt text" src="../image-37.png"/></p>
+<p><img alt="alt text" src="../image-12.png"/></p>
 <p>This graph compares harmonic driving force (light blue line) with non-periodic driving force (orange line). The harmonic force follows a regular oscillatory pattern, while the non-periodic force introduces irregular fluctuations, simulating random environmental inputs.</p>
 <ul>
 <li><strong>Coupled pendula</strong>: Network behavior and synchronization.</li>
 </ul>
-<p><img alt="alt text" src="../image-38.png"/></p>
+<p><img alt="alt text" src="../image-13.png"/></p>
 <p>This graph shows the synchronized motion of two coupled pendula. The blue line represents Pendulum 1 (θ₁), while the red line represents Pendulum 2 (θ₂). Both pendulums exhibit synchronized oscillations, highlighting the concept of synchronization and network behavior in coupled systems.</p>
 </div>
 </div><footer>

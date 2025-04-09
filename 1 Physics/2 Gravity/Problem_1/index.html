@@ -405,9 +405,15 @@ plt.show()
 <hr/>
 <h2 id="implications-and-applications-in-astronomy">Implications and Applications in Astronomy</h2>
 <h3 id="determining-masses-of-celestial-bodies">Determining Masses of Celestial Bodies</h3>
-<p>From:
-[ T^2 = \frac{4 \pi^2}{G M} r^3 \Rightarrow M = \frac{4 \pi^2 r^3}{G T^2} ]
-We can measure the orbital radius <span class="arithmatex">\(r\)</span> and period <span class="arithmatex">\(T\)</span> to compute the mass <span class="arithmatex">\(M\)</span> of the central object, such as a planet, star, or black hole.</p>
+<p>From Kepler's third law:</p>
+<div class="arithmatex">\[
+T^2 = \frac{4 \pi^2}{G M} r^3 
+\]</div>
+<p>Rearranging to solve for the mass <span class="arithmatex">\( M \)</span>:</p>
+<div class="arithmatex">\[
+M = \frac{4 \pi^2 r^3}{G T^2}
+\]</div>
+<p>By measuring the orbital radius <span class="arithmatex">\( r \)</span> and period <span class="arithmatex">\( T \)</span>, we can compute the mass <span class="arithmatex">\( M \)</span> of the central object, such as a planet, star, or black hole.</p>
 <h3 id="satellite-deployment">Satellite Deployment</h3>
 <p>Communication, GPS, and observational satellites must be placed in orbits with carefully calculated radii and periods. Kepler’s Law enables mission planners to predict and design stable satellite orbits.</p>
 <h3 id="exoplanet-discovery">Exoplanet Discovery</h3>
@@ -542,10 +548,10 @@ files.download('elliptical_orbit.mp4')
 <ol>
 <li><strong>Cometary Trajectories</strong>:</li>
 <li>Comets, with their highly elliptical orbits, often have periods that span many years or even centuries. As they approach the Sun, they accelerate due to the Sun’s gravitational pull, and as they move farther away, they slow down. The semi-major axis in the formula allows us to calculate the orbital period of comets, despite their significant distance changes from the central mass.</li>
-<li>For instance, <strong>Halley's Comet</strong>, with an orbital period of about 76 years, follows an elliptical path. Its distance from the Sun varies dramatically from about 0.09 AU (at perihelion) to 35 AU (at aphelion), yet Kepler’s law still applies when we use the semi-major axis to describe its orbit.
-   ### Halley’s Comet Speed Variation Over Orbit:
-   Below is a graph that illustrates the speed variation of Halley’s Comet as it travels along its elliptical orbit. The speed is highest near the perihelion (closest point to the Sun) and lowest near the aphelion (farthest point from the Sun).</li>
+<li>For instance, <strong>Halley's Comet</strong>, with an orbital period of about 76 years, follows an elliptical path. Its distance from the Sun varies dramatically from about 0.09 AU (at perihelion) to 35 AU (at aphelion), yet Kepler’s law still applies when we use the semi-major axis to describe its orbit.</li>
 </ol>
+<p>### Halley’s Comet Speed Variation Over Orbit</p>
+<p>Below is a graph that illustrates the speed variation of Halley’s Comet as it travels along its elliptical orbit. The speed is highest near the <strong>perihelion</strong> (the closest point to the Sun) and lowest near the <strong>aphelion</strong> (the farthest point from the Sun).</p>
 <details>
 <summary>Show Python code</summary>
 <pre><code>

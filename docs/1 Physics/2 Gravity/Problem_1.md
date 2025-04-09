@@ -296,9 +296,21 @@ plt.show()
 ## Implications and Applications in Astronomy
 
 ### Determining Masses of Celestial Bodies
-From:
-\[ T^2 = \frac{4 \pi^2}{G M} r^3 \Rightarrow M = \frac{4 \pi^2 r^3}{G T^2} \]
-We can measure the orbital radius $r$ and period $T$ to compute the mass $M$ of the central object, such as a planet, star, or black hole.
+
+From Kepler's third law:
+
+$$
+T^2 = \frac{4 \pi^2}{G M} r^3 
+$$
+
+Rearranging to solve for the mass \( M \):
+
+$$
+M = \frac{4 \pi^2 r^3}{G T^2}
+$$
+
+By measuring the orbital radius \( r \) and period \( T \), we can compute the mass \( M \) of the central object, such as a planet, star, or black hole.
+
 
 ### Satellite Deployment
 Communication, GPS, and observational satellites must be placed in orbits with carefully calculated radii and periods. Kepler’s Law enables mission planners to predict and design stable satellite orbits.
@@ -456,8 +468,11 @@ This animation visualizes how planets move in elliptical orbits and how Kepler's
 2. **Cometary Trajectories**:
    - Comets, with their highly elliptical orbits, often have periods that span many years or even centuries. As they approach the Sun, they accelerate due to the Sun’s gravitational pull, and as they move farther away, they slow down. The semi-major axis in the formula allows us to calculate the orbital period of comets, despite their significant distance changes from the central mass.
    - For instance, **Halley's Comet**, with an orbital period of about 76 years, follows an elliptical path. Its distance from the Sun varies dramatically from about 0.09 AU (at perihelion) to 35 AU (at aphelion), yet Kepler’s law still applies when we use the semi-major axis to describe its orbit.
-   ### Halley’s Comet Speed Variation Over Orbit:
-   Below is a graph that illustrates the speed variation of Halley’s Comet as it travels along its elliptical orbit. The speed is highest near the perihelion (closest point to the Sun) and lowest near the aphelion (farthest point from the Sun).
+   
+   ### Halley’s Comet Speed Variation Over Orbit
+
+Below is a graph that illustrates the speed variation of Halley’s Comet as it travels along its elliptical orbit. The speed is highest near the **perihelion** (the closest point to the Sun) and lowest near the **aphelion** (the farthest point from the Sun).
+
 
 <details>
   <summary>Show Python code</summary>

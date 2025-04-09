@@ -421,12 +421,17 @@ We can measure the orbital radius <span class="arithmatex">\(r\)</span> and peri
 <li>Gravitational constant: <span class="arithmatex">\(G = 6.674 \times 10^{-11}\)</span> Nm²/kg²</li>
 </ul>
 <div class="arithmatex">\[ T = 2 \pi \sqrt{\frac{(3.844 \times 10^8)^3}{6.674 \times 10^{-11} \cdot 5.972 \times 10^{24}}} \approx 2.36 \times 10^6\ \text{s} \approx 27.3\ \text{days} \]</div>
+<h4 id="data-set-diversification">Data Set Diversification:</h4>
+<p>Kepler's Law is not only valid for planets. For example, <strong>GPS satellites</strong> orbiting Earth and <strong>Ceres</strong>, an asteroid, also follow this law. The gravitational effects on GPS satellites make the calculations more complex, but Kepler's law still plays a fundamental role in these computations.</p>
 <h3 id="example-2-earth-orbiting-the-sun">Example 2: Earth Orbiting the Sun</h3>
 <ul>
 <li>Radius: <span class="arithmatex">\(r = 1.496 \times 10^{11}\)</span> m</li>
 <li>Mass of Sun: <span class="arithmatex">\(M = 1.989 \times 10^{30}\)</span> kg</li>
 </ul>
 <div class="arithmatex">\[ T = 2 \pi \sqrt{\frac{(1.496 \times 10^{11})^3}{6.674 \times 10^{-11} \cdot 1.989 \times 10^{30}}} \approx 3.15 \times 10^7\ \text{s} \approx 365.25\ \text{days} \]</div>
+<h4 id="deeper-real-world-applications">Deeper Real-World Applications:</h4>
+<p>Kepler's Law is not only a theoretical concept but also a practical tool in space exploration. For instance, <strong>the Perseverance Rover</strong>'s journey to Mars utilized Kepler’s law to calculate the orbital mechanics for a successful landing. These calculations are vital for interplanetary missions.</p>
+<p>Additionally, <strong>interplanetary transfer orbits</strong> are designed using Kepler’s law to ensure spacecraft follow the most efficient path when traveling between planets.</p>
 <hr/>
 <h2 id="computational-simulation-in-python">Computational Simulation in Python</h2>
 <p>We now simulate various orbital radii and compute the corresponding orbital periods.</p>
@@ -529,25 +534,75 @@ ani.save('elliptical_orbit.mp4', writer='ffmpeg', fps=24)
 files.download('elliptical_orbit.mp4')
   </code></pre>
 </details>
+<video controls="" width="600">
+<source src="https://raw.githubusercontent.com/SelimEmre7/solutions_repo/main/elliptical_orbit%20(1).mp4" type="video/mp4"/>
+  Your browser does not support the video tag.
+</video>
+<p>This animation visualizes how planets move in elliptical orbits and how Kepler's Third Law affects their speeds and orbital periods. It clearly demonstrates how changes in distance along the orbit influence acceleration and deceleration.</p>
 <ol>
 <li><strong>Cometary Trajectories</strong>:</li>
 <li>Comets, with their highly elliptical orbits, often have periods that span many years or even centuries. As they approach the Sun, they accelerate due to the Sun’s gravitational pull, and as they move farther away, they slow down. The semi-major axis in the formula allows us to calculate the orbital period of comets, despite their significant distance changes from the central mass.</li>
-<li>
-<p>For instance, <strong>Halley's Comet</strong>, with an orbital period of about 76 years, follows an elliptical path. Its distance from the Sun varies dramatically from about 0.09 AU (at perihelion) to 35 AU (at aphelion), yet Kepler’s law still applies when we use the semi-major axis to describe its orbit.</p>
-</li>
-<li>
-<p><strong>Orbits in Multi-Body Systems</strong>:</p>
-</li>
+<li>For instance, <strong>Halley's Comet</strong>, with an orbital period of about 76 years, follows an elliptical path. Its distance from the Sun varies dramatically from about 0.09 AU (at perihelion) to 35 AU (at aphelion), yet Kepler’s law still applies when we use the semi-major axis to describe its orbit.
+   ### Halley’s Comet Speed Variation Over Orbit:
+   Below is a graph that illustrates the speed variation of Halley’s Comet as it travels along its elliptical orbit. The speed is highest near the perihelion (closest point to the Sun) and lowest near the aphelion (farthest point from the Sun).</li>
+</ol>
+<details>
+<summary>Show Python code</summary>
+<pre><code>
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Constants for Halley's Comet
+a = 17.8  # Semi-major axis in AU
+e = 0.967  # Eccentricity of Halley's comet
+G = 6.67430e-11  # Gravitational constant (m^3 kg^-1 s^-2)
+M_sun = 1.989e30  # Mass of the Sun in kg
+theta = np.linspace(0, 2 * np.pi, 100)
+
+# Orbital equation for Halley's comet
+r = a * (1 - e**2) / (1 + e * np.cos(theta))  # Semi-major axis formula
+
+# Calculate the speed of Halley's comet at different positions
+v = np.sqrt(G * M_sun * (2 / r - 1 / a))  # Orbital velocity equation
+
+# Plotting the comet's speed variation
+plt.figure(figsize=(8, 6))
+
+# Plot the speed with a line
+plt.plot(theta, v, label="Comet's Speed over Orbit", color='blue')
+
+# Highlight perihelion (theta = 0) and aphelion (theta = pi)
+perihelion_speed = v[0]
+aphelion_speed = v[len(v)//2]
+plt.scatter([0, np.pi], [perihelion_speed, aphelion_speed], color='red', zorder=5)  # Perihelion and Aphelion
+plt.text(0, perihelion_speed, 'Perihelion', fontsize=12, verticalalignment='bottom', horizontalalignment='right')
+plt.text(np.pi, aphelion_speed, 'Aphelion', fontsize=12, verticalalignment='bottom', horizontalalignment='right')
+
+# Adding labels and title
+plt.xlabel('Orbital Angle (radians)')
+plt.ylabel('Speed (m/s)')
+plt.title("Halley's Comet Speed Variation Over Orbit")
+plt.legend()
+
+# Displaying grid
+plt.grid(True)
+plt.show()
+  </code></pre>
+</details>
+<p><img alt="alt text" src="../image-7.png"/></p>
+<ol>
+<li><strong>Orbits in Multi-Body Systems</strong>:</li>
 <li>In complex multi-body systems, such as star clusters or galaxies, objects often follow elliptical orbits around multiple gravitational sources. Kepler’s Third Law, generalized for elliptical orbits, can be applied in these systems, but <strong>numerical methods</strong> are typically used to account for the interactions between the multiple bodies. </li>
 <li>For instance, in a <strong>binary star system</strong>, both stars orbit around their common center of mass in elliptical orbits. The generalized form of Kepler's law allows astronomers to predict the orbital periods of such systems, and advanced numerical simulations are used to account for the gravitational influences of additional bodies (such as moons or planets).</li>
 </ol>
 <h3 id="the-importance-of-the-semi-major-axis">The Importance of the Semi-Major Axis:</h3>
-<ul>
-<li>The <strong>semi-major axis</strong> <span class="arithmatex">\( a \)</span> is fundamental not only in elliptical orbits but also in analyzing the <strong>shape</strong> and <strong>size</strong> of the orbit. The greater the semi-major axis, the longer the orbital period. In fact, the orbital period is <strong>directly proportional</strong> to the cube of the semi-major axis, making <span class="arithmatex">\( a \)</span> the most crucial parameter for determining the time a body takes to complete an orbit around a central mass.</li>
-<li>In celestial mechanics, the semi-major axis is often considered the "average" distance because it represents the balance point between the closest and farthest distances of the orbiting object.</li>
-</ul>
+<p>The semi-major axis ( <span class="arithmatex">\( a \)</span> ) is fundamental not only in elliptical orbits but also in analyzing the shape and size of the orbit. The greater the semi-major axis, the longer the orbital period. In fact, the orbital period is directly proportional to the cube of the semi-major axis, making <span class="arithmatex">\( a \)</span> the most crucial parameter for determining the time a body takes to complete an orbit around a central mass.</p>
+<p>In celestial mechanics, the semi-major axis is often considered the "average" distance because it represents the balance point between the closest and farthest distances of the orbiting object.</p>
+<hr/>
 <h3 id="conclusion">Conclusion:</h3>
 <p>The extension of Kepler's Third Law to elliptical orbits enhances its applicability to real-world astronomical systems. By replacing the radius <span class="arithmatex">\( r \)</span> with the semi-major axis <span class="arithmatex">\( a \)</span>, we are able to account for the elliptical nature of most orbits and maintain the law's predictive power. This generalization allows scientists to study a wide range of orbital phenomena, from the movements of planets in the Solar System to the trajectories of comets and objects in multi-body gravitational systems.</p>
+<p>Kepler’s Third Law elegantly connects time and space in the context of orbital motion. Its derivation from Newton’s law of gravity shows the power of mathematical physics in describing natural phenomena. Applications of this law span across planetary astronomy, satellite engineering, and cosmology.</p>
+<p>Through analytical derivation, real-world application, and computational verification, we demonstrated the universal validity of this relationship. Understanding this law equips us with the tools to navigate not only our own solar system but also the broader universe, as we seek to discover and comprehend the worlds beyond.</p>
 <hr/>
 <h3 id="summary">Summary:</h3>
 <ul>
@@ -555,10 +610,6 @@ files.download('elliptical_orbit.mp4')
 <li><strong>Elliptical Orbits</strong>: <span class="arithmatex">\( T^2 \propto a^3 \)</span> (where <span class="arithmatex">\( a \)</span> is the semi-major axis, the average distance).</li>
 </ul>
 <p>This extended formulation provides us with a robust tool for studying and predicting orbital periods in a variety of celestial contexts, and it remains a cornerstone of celestial mechanics even in the presence of complex gravitational interactions.</p>
-<hr/>
-<h2 id="conclusion_1">Conclusion</h2>
-<p>Kepler’s Third Law elegantly connects time and space in the context of orbital motion. Its derivation from Newton’s law of gravity shows the power of mathematical physics in describing natural phenomena. Applications of this law span across planetary astronomy, satellite engineering, and cosmology.</p>
-<p>Through analytical derivation, real-world application, and computational verification, we demonstrated the universal validity of this relationship. Understanding this law equips us with the tools to navigate not only our own solar system but also the broader universe, as we seek to discover and comprehend the worlds beyond.</p>
 </div>
 </div><footer>
 <div aria-label="Footer Navigation" class="rst-footer-buttons" role="navigation">

@@ -19,61 +19,92 @@ This report develops a computational tool to simulate such motion, leveraging Py
 ## Theoretical Background
 ### Newton's Law of Universal Gravitation
 
-Newton's Law of Universal Gravitation states that every point mass attracts every other point mass in the universe with a force that is:
+Newton's Law of Universal Gravitation** states that every point mass attracts every other point mass in the universe with a force given by:
 
-[ F = G \frac{Mm}{r^2} ]
+```math
+F = G \frac{Mm}{r^2}
+```
 
 Where:
 
-( F ): Gravitational force between the two bodies (in newtons, N)  
-( G = 6.67430 \times 10^{-11} \ \text{Nm}^2/\text{kg}^2 ): Gravitational constant  
-( M ): Mass of the Earth ( (5.972 \times 10^{24} \ \text{kg}) )  
-( m ): Mass of the payload or satellite  
-( r ): Distance between the centers of the two masses (in meters)  
+- **F**: Gravitational force between the two bodies (in newtons, N)  
+- **G**: Gravitational constant  
+  \( G = 6.67430 \times 10^{-11} \ \text{Nm}^2/\text{kg}^2 \)  
+- **M**: Mass of the Earth  
+  \( M = 5.972 \times 10^{24} \ \text{kg} \)  
+- **m**: Mass of the payload or satellite  
+- **r**: Distance between the centers of the two masses (in meters)
 
-The direction of this force is always towards the center of the Earth, and it decreases with the square of the distance. This inverse-square nature is key in determining orbital dynamics.
+>  The direction of this force is always toward the center of the Earth, and it decreases with the square of the distance. This **inverse-square law** is key in determining **orbital dynamics**.
+
 
 ---
 
 ### Equation of Motion from Newton’s Second Law
+**Newton’s Second Law of Motion** defines force as:
 
-Newton’s Second Law of Motion defines force as:
+```math
+\vec{F} = m \vec{a} \quad \Rightarrow \quad \vec{a} = \frac{\vec{F}}{m} = -G \frac{M}{r^3} \vec{r}
+```
 
-[ \vec{F} = m \vec{a} \quad \Rightarrow \quad \vec{a} = \frac{\vec{F}}{m} = -G \frac{M}{r^3} \vec{r} ]
+This gives us the **acceleration due to gravity** as a vector pointing toward the Earth.  
+The vector form:
 
-This gives us the acceleration due to gravity as a vector pointing toward the Earth. This vector equation forms the basis of the motion equations we solve numerically using the Runge-Kutta method in the simulation.
+- Accounts for direction (toward Earth's center)
+- Has magnitude that decreases with the square of the distance
+- Uses \( \vec{r} \), the position vector from Earth’s center to the object
+
+This vector equation forms the foundation of the **equations of motion** we solve numerically using the **Runge-Kutta method** in the simulation.
 
 ---
 
 ### Total Mechanical Energy
+The **mechanical energy** of an object in orbit is the sum of its kinetic and gravitational potential energy:
 
-The mechanical energy of an object in orbit is the sum of its kinetic and gravitational potential energy:
+```math
+E = \frac{1}{2}mv^2 - \frac{GMm}{r}
+```
 
-[ E = \frac{1}{2}mv^2 - \frac{GMm}{r} ]
+Dividing both sides by \( m \), we get the **specific mechanical energy**:
 
-Dividing both sides by ( m ), we get the specific mechanical energy:
+```math
+\varepsilon = \frac{v^2}{2} - \frac{GM}{r}
+```
 
-[ \varepsilon = \frac{v^2}{2} - \frac{GM}{r} ]
+This specific energy determines the **type of trajectory**:
 
-This specific energy defines the type of trajectory:
-
-( \varepsilon < 0 ): Elliptical orbit (bound system)  
-( \varepsilon = 0 ): Parabolic trajectory (escape condition)  
-( \varepsilon > 0 ): Hyperbolic trajectory (unbound system)
+- \( \varepsilon < 0 \): **Elliptical orbit** (bound system)  
+- \( \varepsilon = 0 \): **Parabolic trajectory** (escape condition)  
+- \( \varepsilon > 0 \): **Hyperbolic trajectory** (unbound system)
 
 ---
 
 ### Escape Velocity
+**Escape velocity** is the minimum speed required for a payload to escape Earth’s gravity without further propulsion.  
+It can be derived by setting the **specific mechanical energy** to zero:
 
-Escape velocity is the minimum speed required for a payload to escape Earth’s gravity without further propulsion. It can be derived by setting the specific energy to zero:
+```math
+\frac{1}{2}v_{\text{esc}}^2 - \frac{GM}{r} = 0 
+\quad \Rightarrow \quad 
+v_{\text{esc}} = \sqrt{\frac{2GM}{r}}
+```
 
-[ \frac{1}{2}v_{\text{esc}}^2 - \frac{GM}{r} = 0 \quad \Rightarrow \quad v_{\text{esc}} = \sqrt{\frac{2GM}{r}} ]
+###  Example Calculation (at 400 km altitude):
 
-Example Calculation (at 400 km altitude):
+Given:
 
-[ r = R_{\text{Earth}} + 400,000 , \text{m} = 6.771 \times 10^6 , \text{m} ]
+```math
+r = R_{\text{Earth}} + 400{,}000 \, \text{m} = 6.771 \times 10^6 \, \text{m}
+```
 
-[ v_{\text{esc}} = \sqrt{\frac{2 \cdot 6.67430\times10^{-11} \cdot 5.972\times10^{24}}{6.771\times10^6}} \approx 10,900 , \text{m/s} ]
+Then:
+
+```math
+v_{\text{esc}} = \sqrt{\frac{2 \cdot 6.67430 \times 10^{-11} \cdot 5.972 \times 10^{24}}{6.771 \times 10^6}} 
+\approx 10{,}900 \, \text{m/s}
+```
+
+Thus, the escape velocity from an altitude of **400 km** is approximately **10,900 m/s**.
 
 ---
 
@@ -81,13 +112,21 @@ Example Calculation (at 400 km altitude):
 
 In a stable circular orbit, the gravitational force acts as the centripetal force needed to keep the object moving in a circle:
 
-[ \frac{mv^2}{r} = G \frac{Mm}{r^2} \quad \Rightarrow \quad v = \sqrt{\frac{GM}{r}} ]
+```math
+\frac{mv^2}{r} = G \frac{Mm}{r^2} 
+\quad \Rightarrow \quad 
+v = \sqrt{\frac{GM}{r}}
+```
 
 Example Calculation (same altitude of 400 km):
 
-[ v_{\text{circ}} = \sqrt{\frac{6.67430 \times 10^{-11} \cdot 5.972 \times 10^{24}}{6.771 \times 10^6}} \approx 7,670 , \text{m/s} ]
+```math
+v_{\text{circ}} = \sqrt{\frac{6.67430 \times 10^{-11} \cdot 5.972 \times 10^{24}}{6.771 \times 10^6}} 
+\approx 7,670 \, \text{m/s}
+```
 
 This is the speed required to maintain a low Earth orbit (LEO) at 400 km altitude.
+
 
 ---
 
@@ -101,8 +140,8 @@ To solve the differential equations of motion numerically, we apply the 4th-orde
 - Ideal for second-order systems like orbital mechanics
 
 **Algorithm Steps:**  
-- Discretize time into small steps ( \Delta t )  
-- Compute intermediate estimates ( k_1, k_2, k_3, k_4 ) for both velocity and position  
+- Discretize time into small steps ( \( \Delta t \) )  
+- Compute intermediate estimates ( \( k_1, k_2, k_3, k_4 \) ) for both velocity and position  
 - Update values based on weighted average
 
 ---
@@ -115,9 +154,12 @@ The Runge-Kutta method of 4th order (RK4) is a widely used numerical method to s
 
 In the context of orbital mechanics, the equations of motion are:
 
-[ \frac{d\vec{r}}{dt} = \vec{v}, \quad \frac{d\vec{v}}{dt} = \vec{a}(\vec{r}) = -G \frac{M}{r^3} \vec{r} ]
+$$
+\frac{d\vec{r}}{dt} = \vec{v}, \quad \frac{d\vec{v}}{dt} = \vec{a}(\vec{r}) = -G \frac{M}{r^3} \vec{r}
+$$
 
 These represent a second-order system, which we convert into a system of first-order equations and solve numerically.
+
 
 ---
 
@@ -136,22 +178,28 @@ It does this by evaluating the slope at multiple points within each timestep.
 
 To compute the next position and velocity \( (\vec{r}_{n+1}, \vec{v}_{n+1}) \) from current state \( (\vec{r}_n, \vec{v}_n) \), RK4 uses:
 
-[ \begin{align*} 
+$$
+\begin{align*}
 k_1^r &= \vec{v}_n \\
 k_1^v &= \vec{a}(\vec{r}_n) \\
 k_2^r &= \vec{v}_n + \frac{1}{2} \Delta t \cdot k_1^v \\
-k_2^v &= \vec{a}(\vec{r}_n + \frac{1}{2} \Delta t \cdot k_1^r) \\
+k_2^v &= \vec{a}\left(\vec{r}_n + \frac{1}{2} \Delta t \cdot k_1^r\right) \\
 k_3^r &= \vec{v}_n + \frac{1}{2} \Delta t \cdot k_2^v \\
-k_3^v &= \vec{a}(\vec{r}_n + \frac{1}{2} \Delta t \cdot k_2^r) \\
+k_3^v &= \vec{a}\left(\vec{r}_n + \frac{1}{2} \Delta t \cdot k_2^r\right) \\
 k_4^r &= \vec{v}_n + \Delta t \cdot k_3^v \\
-k_4^v &= \vec{a}(\vec{r}_n + \Delta t \cdot k_3^r)
-\end{align*} ]
+k_4^v &= \vec{a}\left(\vec{r}_n + \Delta t \cdot k_3^r\right)
+\end{align*}
+$$
 
 Then update:
 
-[ \vec{r}_{n+1} = \vec{r}_n + \frac{\Delta t}{6}(k_1^r + 2k_2^r + 2k_3^r + k_4^r) ]
+$$
+\vec{r}_{n+1} = \vec{r}_n + \frac{\Delta t}{6}(k_1^r + 2k_2^r + 2k_3^r + k_4^r)
+$$
 
-[ \vec{v}_{n+1} = \vec{v}_n + \frac{\Delta t}{6}(k_1^v + 2k_2^v + 2k_3^v + k_4^v) ]
+$$
+\vec{v}_{n+1} = \vec{v}_n + \frac{\Delta t}{6}(k_1^v + 2k_2^v + 2k_3^v + k_4^v)
+$$
 
 ---
 

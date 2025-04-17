@@ -21,9 +21,10 @@ This report develops a computational tool to simulate such motion, leveraging Py
 
 Newton's Law of Universal Gravitation** states that every point mass attracts every other point mass in the universe with a force given by:
 
-```math
+$$
 F = G \frac{Mm}{r^2}
-```
+$$
+
 
 Where:
 
@@ -43,9 +44,9 @@ Where:
 ### Equation of Motion from Newton’s Second Law
 **Newton’s Second Law of Motion** defines force as:
 
-```math
+$$
 \vec{F} = m \vec{a} \quad \Rightarrow \quad \vec{a} = \frac{\vec{F}}{m} = -G \frac{M}{r^3} \vec{r}
-```
+$$
 
 This gives us the **acceleration due to gravity** as a vector pointing toward the Earth.  
 The vector form:
@@ -61,15 +62,17 @@ This vector equation forms the foundation of the **equations of motion** we solv
 ### Total Mechanical Energy
 The **mechanical energy** of an object in orbit is the sum of its kinetic and gravitational potential energy:
 
-```math
+$$
 E = \frac{1}{2}mv^2 - \frac{GMm}{r}
-```
+$$
+
 
 Dividing both sides by \( m \), we get the **specific mechanical energy**:
 
-```math
+$$
 \varepsilon = \frac{v^2}{2} - \frac{GM}{r}
-```
+$$
+
 
 This specific energy determines the **type of trajectory**:
 
@@ -83,26 +86,29 @@ This specific energy determines the **type of trajectory**:
 **Escape velocity** is the minimum speed required for a payload to escape Earth’s gravity without further propulsion.  
 It can be derived by setting the **specific mechanical energy** to zero:
 
-```math
+$$
 \frac{1}{2}v_{\text{esc}}^2 - \frac{GM}{r} = 0 
 \quad \Rightarrow \quad 
 v_{\text{esc}} = \sqrt{\frac{2GM}{r}}
-```
+$$
+
 
 ###  Example Calculation (at 400 km altitude):
 
 Given:
 
-```math
-r = R_{\text{Earth}} + 400{,}000 \, \text{m} = 6.771 \times 10^6 \, \text{m}
-```
+$$
+r = R_{\text{Earth}} + 400{,}000\,\text{m} = 6.771 \times 10^6\,\text{m}
+$$
+
 
 Then:
 
-```math
+$$
 v_{\text{esc}} = \sqrt{\frac{2 \cdot 6.67430 \times 10^{-11} \cdot 5.972 \times 10^{24}}{6.771 \times 10^6}} 
-\approx 10{,}900 \, \text{m/s}
-```
+\approx 10\,900 \, \text{m/s}
+$$
+
 
 Thus, the escape velocity from an altitude of **400 km** is approximately **10,900 m/s**.
 
@@ -112,18 +118,20 @@ Thus, the escape velocity from an altitude of **400 km** is approximately **10,9
 
 In a stable circular orbit, the gravitational force acts as the centripetal force needed to keep the object moving in a circle:
 
-```math
+$$
 \frac{mv^2}{r} = G \frac{Mm}{r^2} 
 \quad \Rightarrow \quad 
 v = \sqrt{\frac{GM}{r}}
-```
+$$
+
 
 Example Calculation (same altitude of 400 km):
 
-```math
+$$
 v_{\text{circ}} = \sqrt{\frac{6.67430 \times 10^{-11} \cdot 5.972 \times 10^{24}}{6.771 \times 10^6}} 
-\approx 7,670 \, \text{m/s}
-```
+\approx 7\,670 \, \text{m/s}
+$$
+
 
 This is the speed required to maintain a low Earth orbit (LEO) at 400 km altitude.
 

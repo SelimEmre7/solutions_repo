@@ -186,43 +186,77 @@
 <p>This report develops a computational tool to simulate such motion, leveraging Python for numerical integration of the governing equations. The results offer insights into the implications of varying release conditions (altitude, speed, direction) and how these affect whether the payload orbits, reenters, or escapes Earth.</p>
 <h2 id="theoretical-background">Theoretical Background</h2>
 <h3 id="newtons-law-of-universal-gravitation">Newton's Law of Universal Gravitation</h3>
-<p>Newton's Law of Universal Gravitation states that every point mass attracts every other point mass in the universe with a force that is:</p>
-<p>[ F = G \frac{Mm}{r^2} ]</p>
+<p>Newton's Law of Universal Gravitation** states that every point mass attracts every other point mass in the universe with a force given by:</p>
+<pre><code class="language-math">F = G \frac{Mm}{r^2}
+</code></pre>
 <p>Where:</p>
-<p>( F ): Gravitational force between the two bodies (in newtons, N)<br/>
-( G = 6.67430 \times 10^{-11} \ \text{Nm}^2/\text{kg}^2 ): Gravitational constant<br/>
-( M ): Mass of the Earth ( (5.972 \times 10^{24} \ \text{kg}) )<br/>
-( m ): Mass of the payload or satellite<br/>
-( r ): Distance between the centers of the two masses (in meters)  </p>
-<p>The direction of this force is always towards the center of the Earth, and it decreases with the square of the distance. This inverse-square nature is key in determining orbital dynamics.</p>
+<ul>
+<li><strong>F</strong>: Gravitational force between the two bodies (in newtons, N)  </li>
+<li><strong>G</strong>: Gravitational constant<br/>
+<span class="arithmatex">\( G = 6.67430 \times 10^{-11} \ \text{Nm}^2/\text{kg}^2 \)</span> </li>
+<li><strong>M</strong>: Mass of the Earth<br/>
+<span class="arithmatex">\( M = 5.972 \times 10^{24} \ \text{kg} \)</span> </li>
+<li><strong>m</strong>: Mass of the payload or satellite  </li>
+<li><strong>r</strong>: Distance between the centers of the two masses (in meters)</li>
+</ul>
+<blockquote>
+<p>The direction of this force is always toward the center of the Earth, and it decreases with the square of the distance. This <strong>inverse-square law</strong> is key in determining <strong>orbital dynamics</strong>.</p>
+</blockquote>
 <hr/>
 <h3 id="equation-of-motion-from-newtons-second-law">Equation of Motion from Newton’s Second Law</h3>
-<p>Newton’s Second Law of Motion defines force as:</p>
-<p>[ \vec{F} = m \vec{a} \quad \Rightarrow \quad \vec{a} = \frac{\vec{F}}{m} = -G \frac{M}{r^3} \vec{r} ]</p>
-<p>This gives us the acceleration due to gravity as a vector pointing toward the Earth. This vector equation forms the basis of the motion equations we solve numerically using the Runge-Kutta method in the simulation.</p>
+<p><strong>Newton’s Second Law of Motion</strong> defines force as:</p>
+<pre><code class="language-math">\vec{F} = m \vec{a} \quad \Rightarrow \quad \vec{a} = \frac{\vec{F}}{m} = -G \frac{M}{r^3} \vec{r}
+</code></pre>
+<p>This gives us the <strong>acceleration due to gravity</strong> as a vector pointing toward the Earth.<br/>
+The vector form:</p>
+<ul>
+<li>Accounts for direction (toward Earth's center)</li>
+<li>Has magnitude that decreases with the square of the distance</li>
+<li>Uses <span class="arithmatex">\( \vec{r} \)</span>, the position vector from Earth’s center to the object</li>
+</ul>
+<p>This vector equation forms the foundation of the <strong>equations of motion</strong> we solve numerically using the <strong>Runge-Kutta method</strong> in the simulation.</p>
 <hr/>
 <h3 id="total-mechanical-energy">Total Mechanical Energy</h3>
-<p>The mechanical energy of an object in orbit is the sum of its kinetic and gravitational potential energy:</p>
-<p>[ E = \frac{1}{2}mv^2 - \frac{GMm}{r} ]</p>
-<p>Dividing both sides by ( m ), we get the specific mechanical energy:</p>
-<p>[ \varepsilon = \frac{v^2}{2} - \frac{GM}{r} ]</p>
-<p>This specific energy defines the type of trajectory:</p>
-<p>( \varepsilon &lt; 0 ): Elliptical orbit (bound system)<br/>
-( \varepsilon = 0 ): Parabolic trajectory (escape condition)<br/>
-( \varepsilon &gt; 0 ): Hyperbolic trajectory (unbound system)</p>
+<p>The <strong>mechanical energy</strong> of an object in orbit is the sum of its kinetic and gravitational potential energy:</p>
+<pre><code class="language-math">E = \frac{1}{2}mv^2 - \frac{GMm}{r}
+</code></pre>
+<p>Dividing both sides by <span class="arithmatex">\( m \)</span>, we get the <strong>specific mechanical energy</strong>:</p>
+<pre><code class="language-math">\varepsilon = \frac{v^2}{2} - \frac{GM}{r}
+</code></pre>
+<p>This specific energy determines the <strong>type of trajectory</strong>:</p>
+<ul>
+<li><span class="arithmatex">\( \varepsilon &lt; 0 \)</span>: <strong>Elliptical orbit</strong> (bound system)  </li>
+<li><span class="arithmatex">\( \varepsilon = 0 \)</span>: <strong>Parabolic trajectory</strong> (escape condition)  </li>
+<li><span class="arithmatex">\( \varepsilon &gt; 0 \)</span>: <strong>Hyperbolic trajectory</strong> (unbound system)</li>
+</ul>
 <hr/>
 <h3 id="escape-velocity">Escape Velocity</h3>
-<p>Escape velocity is the minimum speed required for a payload to escape Earth’s gravity without further propulsion. It can be derived by setting the specific energy to zero:</p>
-<p>[ \frac{1}{2}v_{\text{esc}}^2 - \frac{GM}{r} = 0 \quad \Rightarrow \quad v_{\text{esc}} = \sqrt{\frac{2GM}{r}} ]</p>
-<p>Example Calculation (at 400 km altitude):</p>
-<p>[ r = R_{\text{Earth}} + 400,000 , \text{m} = 6.771 \times 10^6 , \text{m} ]</p>
-<p>[ v_{\text{esc}} = \sqrt{\frac{2 \cdot 6.67430\times10^{-11} \cdot 5.972\times10^{24}}{6.771\times10^6}} \approx 10,900 , \text{m/s} ]</p>
+<p><strong>Escape velocity</strong> is the minimum speed required for a payload to escape Earth’s gravity without further propulsion.<br/>
+It can be derived by setting the <strong>specific mechanical energy</strong> to zero:</p>
+<pre><code class="language-math">\frac{1}{2}v_{\text{esc}}^2 - \frac{GM}{r} = 0 
+\quad \Rightarrow \quad 
+v_{\text{esc}} = \sqrt{\frac{2GM}{r}}
+</code></pre>
+<h3 id="example-calculation-at-400-km-altitude">Example Calculation (at 400 km altitude):</h3>
+<p>Given:</p>
+<pre><code class="language-math">r = R_{\text{Earth}} + 400{,}000 \, \text{m} = 6.771 \times 10^6 \, \text{m}
+</code></pre>
+<p>Then:</p>
+<pre><code class="language-math">v_{\text{esc}} = \sqrt{\frac{2 \cdot 6.67430 \times 10^{-11} \cdot 5.972 \times 10^{24}}{6.771 \times 10^6}} 
+\approx 10{,}900 \, \text{m/s}
+</code></pre>
+<p>Thus, the escape velocity from an altitude of <strong>400 km</strong> is approximately <strong>10,900 m/s</strong>.</p>
 <hr/>
 <h3 id="circular-orbital-velocity">Circular Orbital Velocity</h3>
 <p>In a stable circular orbit, the gravitational force acts as the centripetal force needed to keep the object moving in a circle:</p>
-<p>[ \frac{mv^2}{r} = G \frac{Mm}{r^2} \quad \Rightarrow \quad v = \sqrt{\frac{GM}{r}} ]</p>
+<pre><code class="language-math">\frac{mv^2}{r} = G \frac{Mm}{r^2} 
+\quad \Rightarrow \quad 
+v = \sqrt{\frac{GM}{r}}
+</code></pre>
 <p>Example Calculation (same altitude of 400 km):</p>
-<p>[ v_{\text{circ}} = \sqrt{\frac{6.67430 \times 10^{-11} \cdot 5.972 \times 10^{24}}{6.771 \times 10^6}} \approx 7,670 , \text{m/s} ]</p>
+<pre><code class="language-math">v_{\text{circ}} = \sqrt{\frac{6.67430 \times 10^{-11} \cdot 5.972 \times 10^{24}}{6.771 \times 10^6}} 
+\approx 7,670 \, \text{m/s}
+</code></pre>
 <p>This is the speed required to maintain a low Earth orbit (LEO) at 400 km altitude.</p>
 <hr/>
 <h3 id="numerical-simulation-method">Numerical Simulation Method</h3>
@@ -232,15 +266,17 @@
 - Handles stiff systems well<br/>
 - Ideal for second-order systems like orbital mechanics</p>
 <p><strong>Algorithm Steps:</strong><br/>
-- Discretize time into small steps ( \Delta t )<br/>
-- Compute intermediate estimates ( k_1, k_2, k_3, k_4 ) for both velocity and position<br/>
+- Discretize time into small steps ( <span class="arithmatex">\( \Delta t \)</span> )<br/>
+- Compute intermediate estimates ( <span class="arithmatex">\( k_1, k_2, k_3, k_4 \)</span> ) for both velocity and position<br/>
 - Update values based on weighted average</p>
 <hr/>
 <h3 id="runge-kutta-method-rk4">Runge-Kutta Method (RK4)</h3>
 <h4 id="overview">Overview</h4>
 <p>The Runge-Kutta method of 4th order (RK4) is a widely used numerical method to solve ordinary differential equations (ODEs), especially when an analytical solution is difficult or impossible.</p>
 <p>In the context of orbital mechanics, the equations of motion are:</p>
-<p>[ \frac{d\vec{r}}{dt} = \vec{v}, \quad \frac{d\vec{v}}{dt} = \vec{a}(\vec{r}) = -G \frac{M}{r^3} \vec{r} ]</p>
+<div class="arithmatex">\[
+\frac{d\vec{r}}{dt} = \vec{v}, \quad \frac{d\vec{v}}{dt} = \vec{a}(\vec{r}) = -G \frac{M}{r^3} \vec{r}
+\]</div>
 <p>These represent a second-order system, which we convert into a system of first-order equations and solve numerically.</p>
 <hr/>
 <h4 id="why-rk4">Why RK4?</h4>
@@ -252,19 +288,25 @@
 <hr/>
 <h4 id="rk4-step-formula">RK4 Step Formula</h4>
 <p>To compute the next position and velocity <span class="arithmatex">\( (\vec{r}_{n+1}, \vec{v}_{n+1}) \)</span> from current state <span class="arithmatex">\( (\vec{r}_n, \vec{v}_n) \)</span>, RK4 uses:</p>
-<p>[ \begin{align<em>} 
-k_1^r &amp;= \vec{v}_n \
-k_1^v &amp;= \vec{a}(\vec{r}_n) \
-k_2^r &amp;= \vec{v}_n + \frac{1}{2} \Delta t \cdot k_1^v \
-k_2^v &amp;= \vec{a}(\vec{r}_n + \frac{1}{2} \Delta t \cdot k_1^r) \
-k_3^r &amp;= \vec{v}_n + \frac{1}{2} \Delta t \cdot k_2^v \
-k_3^v &amp;= \vec{a}(\vec{r}_n + \frac{1}{2} \Delta t \cdot k_2^r) \
-k_4^r &amp;= \vec{v}_n + \Delta t \cdot k_3^v \
-k_4^v &amp;= \vec{a}(\vec{r}_n + \Delta t \cdot k_3^r)
-\end{align</em>} ]</p>
+<div class="arithmatex">\[
+\begin{align*}
+k_1^r &amp;= \vec{v}_n \\
+k_1^v &amp;= \vec{a}(\vec{r}_n) \\
+k_2^r &amp;= \vec{v}_n + \frac{1}{2} \Delta t \cdot k_1^v \\
+k_2^v &amp;= \vec{a}\left(\vec{r}_n + \frac{1}{2} \Delta t \cdot k_1^r\right) \\
+k_3^r &amp;= \vec{v}_n + \frac{1}{2} \Delta t \cdot k_2^v \\
+k_3^v &amp;= \vec{a}\left(\vec{r}_n + \frac{1}{2} \Delta t \cdot k_2^r\right) \\
+k_4^r &amp;= \vec{v}_n + \Delta t \cdot k_3^v \\
+k_4^v &amp;= \vec{a}\left(\vec{r}_n + \Delta t \cdot k_3^r\right)
+\end{align*}
+\]</div>
 <p>Then update:</p>
-<p>[ \vec{r}_{n+1} = \vec{r}_n + \frac{\Delta t}{6}(k_1^r + 2k_2^r + 2k_3^r + k_4^r) ]</p>
-<p>[ \vec{v}_{n+1} = \vec{v}_n + \frac{\Delta t}{6}(k_1^v + 2k_2^v + 2k_3^v + k_4^v) ]</p>
+<div class="arithmatex">\[
+\vec{r}_{n+1} = \vec{r}_n + \frac{\Delta t}{6}(k_1^r + 2k_2^r + 2k_3^r + k_4^r)
+\]</div>
+<div class="arithmatex">\[
+\vec{v}_{n+1} = \vec{v}_n + \frac{\Delta t}{6}(k_1^v + 2k_2^v + 2k_3^v + k_4^v)
+\]</div>
 <hr/>
 <h4 id="application-in-this-project">Application in This Project</h4>
 <p>In this study, RK4 is implemented to simulate the trajectory of a payload under the influence of Earth's gravity. The simulation starts with an initial position and velocity, and RK4 updates these values iteratively over time.</p>

@@ -187,8 +187,9 @@
 <h2 id="theoretical-background">Theoretical Background</h2>
 <h3 id="newtons-law-of-universal-gravitation">Newton's Law of Universal Gravitation</h3>
 <p>Newton's Law of Universal Gravitation** states that every point mass attracts every other point mass in the universe with a force given by:</p>
-<pre><code class="language-math">F = G \frac{Mm}{r^2}
-</code></pre>
+<div class="arithmatex">\[
+F = G \frac{Mm}{r^2}
+\]</div>
 <p>Where:</p>
 <ul>
 <li><strong>F</strong>: Gravitational force between the two bodies (in newtons, N)  </li>
@@ -205,8 +206,9 @@
 <hr/>
 <h3 id="equation-of-motion-from-newtons-second-law">Equation of Motion from Newton’s Second Law</h3>
 <p><strong>Newton’s Second Law of Motion</strong> defines force as:</p>
-<pre><code class="language-math">\vec{F} = m \vec{a} \quad \Rightarrow \quad \vec{a} = \frac{\vec{F}}{m} = -G \frac{M}{r^3} \vec{r}
-</code></pre>
+<div class="arithmatex">\[
+\vec{F} = m \vec{a} \quad \Rightarrow \quad \vec{a} = \frac{\vec{F}}{m} = -G \frac{M}{r^3} \vec{r}
+\]</div>
 <p>This gives us the <strong>acceleration due to gravity</strong> as a vector pointing toward the Earth.<br/>
 The vector form:</p>
 <ul>
@@ -218,11 +220,13 @@ The vector form:</p>
 <hr/>
 <h3 id="total-mechanical-energy">Total Mechanical Energy</h3>
 <p>The <strong>mechanical energy</strong> of an object in orbit is the sum of its kinetic and gravitational potential energy:</p>
-<pre><code class="language-math">E = \frac{1}{2}mv^2 - \frac{GMm}{r}
-</code></pre>
+<div class="arithmatex">\[
+E = \frac{1}{2}mv^2 - \frac{GMm}{r}
+\]</div>
 <p>Dividing both sides by <span class="arithmatex">\( m \)</span>, we get the <strong>specific mechanical energy</strong>:</p>
-<pre><code class="language-math">\varepsilon = \frac{v^2}{2} - \frac{GM}{r}
-</code></pre>
+<div class="arithmatex">\[
+\varepsilon = \frac{v^2}{2} - \frac{GM}{r}
+\]</div>
 <p>This specific energy determines the <strong>type of trajectory</strong>:</p>
 <ul>
 <li><span class="arithmatex">\( \varepsilon &lt; 0 \)</span>: <strong>Elliptical orbit</strong> (bound system)  </li>
@@ -233,30 +237,35 @@ The vector form:</p>
 <h3 id="escape-velocity">Escape Velocity</h3>
 <p><strong>Escape velocity</strong> is the minimum speed required for a payload to escape Earth’s gravity without further propulsion.<br/>
 It can be derived by setting the <strong>specific mechanical energy</strong> to zero:</p>
-<pre><code class="language-math">\frac{1}{2}v_{\text{esc}}^2 - \frac{GM}{r} = 0 
+<div class="arithmatex">\[
+\frac{1}{2}v_{\text{esc}}^2 - \frac{GM}{r} = 0 
 \quad \Rightarrow \quad 
 v_{\text{esc}} = \sqrt{\frac{2GM}{r}}
-</code></pre>
+\]</div>
 <h3 id="example-calculation-at-400-km-altitude">Example Calculation (at 400 km altitude):</h3>
 <p>Given:</p>
-<pre><code class="language-math">r = R_{\text{Earth}} + 400{,}000 \, \text{m} = 6.771 \times 10^6 \, \text{m}
-</code></pre>
+<div class="arithmatex">\[
+r = R_{\text{Earth}} + 400{,}000\,\text{m} = 6.771 \times 10^6\,\text{m}
+\]</div>
 <p>Then:</p>
-<pre><code class="language-math">v_{\text{esc}} = \sqrt{\frac{2 \cdot 6.67430 \times 10^{-11} \cdot 5.972 \times 10^{24}}{6.771 \times 10^6}} 
-\approx 10{,}900 \, \text{m/s}
-</code></pre>
+<div class="arithmatex">\[
+v_{\text{esc}} = \sqrt{\frac{2 \cdot 6.67430 \times 10^{-11} \cdot 5.972 \times 10^{24}}{6.771 \times 10^6}} 
+\approx 10\,900 \, \text{m/s}
+\]</div>
 <p>Thus, the escape velocity from an altitude of <strong>400 km</strong> is approximately <strong>10,900 m/s</strong>.</p>
 <hr/>
 <h3 id="circular-orbital-velocity">Circular Orbital Velocity</h3>
 <p>In a stable circular orbit, the gravitational force acts as the centripetal force needed to keep the object moving in a circle:</p>
-<pre><code class="language-math">\frac{mv^2}{r} = G \frac{Mm}{r^2} 
+<div class="arithmatex">\[
+\frac{mv^2}{r} = G \frac{Mm}{r^2} 
 \quad \Rightarrow \quad 
 v = \sqrt{\frac{GM}{r}}
-</code></pre>
+\]</div>
 <p>Example Calculation (same altitude of 400 km):</p>
-<pre><code class="language-math">v_{\text{circ}} = \sqrt{\frac{6.67430 \times 10^{-11} \cdot 5.972 \times 10^{24}}{6.771 \times 10^6}} 
-\approx 7,670 \, \text{m/s}
-</code></pre>
+<div class="arithmatex">\[
+v_{\text{circ}} = \sqrt{\frac{6.67430 \times 10^{-11} \cdot 5.972 \times 10^{24}}{6.771 \times 10^6}} 
+\approx 7\,670 \, \text{m/s}
+\]</div>
 <p>This is the speed required to maintain a low Earth orbit (LEO) at 400 km altitude.</p>
 <hr/>
 <h3 id="numerical-simulation-method">Numerical Simulation Method</h3>

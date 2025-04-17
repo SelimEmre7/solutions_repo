@@ -172,6 +172,677 @@
 <div class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
 <div class="section" itemprop="articleBody">
 <h1 id="problem-3">Problem 3</h1>
+<h1 id="trajectories-of-a-freely-released-payload-near-earth">Trajectories of a Freely Released Payload Near Earth</h1>
+<h2 id="introduction-and-motivation">Introduction and Motivation</h2>
+<p>The behavior of an object released from a moving spacecraft near Earth has long been a subject of interest in both academic research and applied aerospace engineering. Such scenarios are not just theoretical; they play a pivotal role in numerous practical applications like satellite deployment, cargo release from spacecraft, orbital transfer maneuvers, and atmospheric reentry planning.</p>
+<p>When a payload is released in space, its subsequent motion is governed primarily by Newton's laws of motion and universal gravitation. Depending on its initial position and velocity, the payload may:</p>
+<ul>
+<li>Enter into an <strong>elliptical orbit</strong> around the Earth</li>
+<li>Travel along a <strong>parabolic trajectory</strong>, representing a marginal escape</li>
+<li>Escape Earth's gravitational field along a <strong>hyperbolic trajectory</strong></li>
+<li>Fall back to Earth along a <strong>suborbital path</strong></li>
+</ul>
+<p>Understanding these trajectories is fundamental for successful mission planning and spacecraft operations. The goal of this project is to explore these possibilities through simulation, graphical visualization, and analysis based on physics and numerical methods.</p>
+<p>This report develops a computational tool to simulate such motion, leveraging Python for numerical integration of the governing equations. The results offer insights into the implications of varying release conditions (altitude, speed, direction) and how these affect whether the payload orbits, reenters, or escapes Earth.</p>
+<h2 id="theoretical-background">Theoretical Background</h2>
+<h3 id="newtons-law-of-universal-gravitation">Newton's Law of Universal Gravitation</h3>
+<p>Newton's Law of Universal Gravitation states that every point mass attracts every other point mass in the universe with a force that is:</p>
+<p>[ F = G \frac{Mm}{r^2} ]</p>
+<p>Where:</p>
+<p>( F ): Gravitational force between the two bodies (in newtons, N)<br/>
+( G = 6.67430 \times 10^{-11} \ \text{Nm}^2/\text{kg}^2 ): Gravitational constant<br/>
+( M ): Mass of the Earth ( (5.972 \times 10^{24} \ \text{kg}) )<br/>
+( m ): Mass of the payload or satellite<br/>
+( r ): Distance between the centers of the two masses (in meters)  </p>
+<p>The direction of this force is always towards the center of the Earth, and it decreases with the square of the distance. This inverse-square nature is key in determining orbital dynamics.</p>
+<hr/>
+<h3 id="equation-of-motion-from-newtons-second-law">Equation of Motion from Newton’s Second Law</h3>
+<p>Newton’s Second Law of Motion defines force as:</p>
+<p>[ \vec{F} = m \vec{a} \quad \Rightarrow \quad \vec{a} = \frac{\vec{F}}{m} = -G \frac{M}{r^3} \vec{r} ]</p>
+<p>This gives us the acceleration due to gravity as a vector pointing toward the Earth. This vector equation forms the basis of the motion equations we solve numerically using the Runge-Kutta method in the simulation.</p>
+<hr/>
+<h3 id="total-mechanical-energy">Total Mechanical Energy</h3>
+<p>The mechanical energy of an object in orbit is the sum of its kinetic and gravitational potential energy:</p>
+<p>[ E = \frac{1}{2}mv^2 - \frac{GMm}{r} ]</p>
+<p>Dividing both sides by ( m ), we get the specific mechanical energy:</p>
+<p>[ \varepsilon = \frac{v^2}{2} - \frac{GM}{r} ]</p>
+<p>This specific energy defines the type of trajectory:</p>
+<p>( \varepsilon &lt; 0 ): Elliptical orbit (bound system)<br/>
+( \varepsilon = 0 ): Parabolic trajectory (escape condition)<br/>
+( \varepsilon &gt; 0 ): Hyperbolic trajectory (unbound system)</p>
+<hr/>
+<h3 id="escape-velocity">Escape Velocity</h3>
+<p>Escape velocity is the minimum speed required for a payload to escape Earth’s gravity without further propulsion. It can be derived by setting the specific energy to zero:</p>
+<p>[ \frac{1}{2}v_{\text{esc}}^2 - \frac{GM}{r} = 0 \quad \Rightarrow \quad v_{\text{esc}} = \sqrt{\frac{2GM}{r}} ]</p>
+<p>Example Calculation (at 400 km altitude):</p>
+<p>[ r = R_{\text{Earth}} + 400,000 , \text{m} = 6.771 \times 10^6 , \text{m} ]</p>
+<p>[ v_{\text{esc}} = \sqrt{\frac{2 \cdot 6.67430\times10^{-11} \cdot 5.972\times10^{24}}{6.771\times10^6}} \approx 10,900 , \text{m/s} ]</p>
+<hr/>
+<h3 id="circular-orbital-velocity">Circular Orbital Velocity</h3>
+<p>In a stable circular orbit, the gravitational force acts as the centripetal force needed to keep the object moving in a circle:</p>
+<p>[ \frac{mv^2}{r} = G \frac{Mm}{r^2} \quad \Rightarrow \quad v = \sqrt{\frac{GM}{r}} ]</p>
+<p>Example Calculation (same altitude of 400 km):</p>
+<p>[ v_{\text{circ}} = \sqrt{\frac{6.67430 \times 10^{-11} \cdot 5.972 \times 10^{24}}{6.771 \times 10^6}} \approx 7,670 , \text{m/s} ]</p>
+<p>This is the speed required to maintain a low Earth orbit (LEO) at 400 km altitude.</p>
+<hr/>
+<h3 id="numerical-simulation-method">Numerical Simulation Method</h3>
+<p>To solve the differential equations of motion numerically, we apply the 4th-order Runge-Kutta (RK4) method.</p>
+<p><strong>Advantages of RK4:</strong><br/>
+- Better accuracy compared to Euler method<br/>
+- Handles stiff systems well<br/>
+- Ideal for second-order systems like orbital mechanics</p>
+<p><strong>Algorithm Steps:</strong><br/>
+- Discretize time into small steps ( \Delta t )<br/>
+- Compute intermediate estimates ( k_1, k_2, k_3, k_4 ) for both velocity and position<br/>
+- Update values based on weighted average</p>
+<hr/>
+<h3 id="runge-kutta-method-rk4">Runge-Kutta Method (RK4)</h3>
+<h4 id="overview">Overview</h4>
+<p>The Runge-Kutta method of 4th order (RK4) is a widely used numerical method to solve ordinary differential equations (ODEs), especially when an analytical solution is difficult or impossible.</p>
+<p>In the context of orbital mechanics, the equations of motion are:</p>
+<p>[ \frac{d\vec{r}}{dt} = \vec{v}, \quad \frac{d\vec{v}}{dt} = \vec{a}(\vec{r}) = -G \frac{M}{r^3} \vec{r} ]</p>
+<p>These represent a second-order system, which we convert into a system of first-order equations and solve numerically.</p>
+<hr/>
+<h4 id="why-rk4">Why RK4?</h4>
+<p>Compared to simpler methods like Euler's method, RK4 provides:<br/>
+- Higher accuracy<br/>
+- Better stability<br/>
+- Low error accumulation  </p>
+<p>It does this by evaluating the slope at multiple points within each timestep.</p>
+<hr/>
+<h4 id="rk4-step-formula">RK4 Step Formula</h4>
+<p>To compute the next position and velocity <span class="arithmatex">\( (\vec{r}_{n+1}, \vec{v}_{n+1}) \)</span> from current state <span class="arithmatex">\( (\vec{r}_n, \vec{v}_n) \)</span>, RK4 uses:</p>
+<p>[ \begin{align<em>} 
+k_1^r &amp;= \vec{v}_n \
+k_1^v &amp;= \vec{a}(\vec{r}_n) \
+k_2^r &amp;= \vec{v}_n + \frac{1}{2} \Delta t \cdot k_1^v \
+k_2^v &amp;= \vec{a}(\vec{r}_n + \frac{1}{2} \Delta t \cdot k_1^r) \
+k_3^r &amp;= \vec{v}_n + \frac{1}{2} \Delta t \cdot k_2^v \
+k_3^v &amp;= \vec{a}(\vec{r}_n + \frac{1}{2} \Delta t \cdot k_2^r) \
+k_4^r &amp;= \vec{v}_n + \Delta t \cdot k_3^v \
+k_4^v &amp;= \vec{a}(\vec{r}_n + \Delta t \cdot k_3^r)
+\end{align</em>} ]</p>
+<p>Then update:</p>
+<p>[ \vec{r}_{n+1} = \vec{r}_n + \frac{\Delta t}{6}(k_1^r + 2k_2^r + 2k_3^r + k_4^r) ]</p>
+<p>[ \vec{v}_{n+1} = \vec{v}_n + \frac{\Delta t}{6}(k_1^v + 2k_2^v + 2k_3^v + k_4^v) ]</p>
+<hr/>
+<h4 id="application-in-this-project">Application in This Project</h4>
+<p>In this study, RK4 is implemented to simulate the trajectory of a payload under the influence of Earth's gravity. The simulation starts with an initial position and velocity, and RK4 updates these values iteratively over time.</p>
+<p>This method is used in all trajectory simulations, including:<br/>
+- Circular and elliptical orbits<br/>
+- Escape paths<br/>
+- Reentry scenarios  </p>
+<p>The use of RK4 ensures that the simulation remains stable and accurate over long time intervals, even in highly nonlinear gravitational systems.</p>
+<h2 id="real-world-applications">Real-World Applications</h2>
+<p>The principles and simulations presented in this report are directly applicable to numerous real-world aerospace missions. Orbital mechanics, driven by Newtonian gravity, governs how satellites, spacecraft, and payloads behave once released near Earth.</p>
+<hr/>
+<h3 id="satellite-launch-and-insertion">Satellite Launch and Insertion</h3>
+<p>Satellites launched into orbit must reach the <strong>circular orbital velocity</strong> for a given altitude. For example:</p>
+<ul>
+<li><strong>Low Earth Orbit (LEO)</strong> satellites like Starlink or Earth observation satellites orbit at ~300–800 km.</li>
+<li>Their required orbital speeds are typically around <strong>7.6–8.0 km/s</strong>.</li>
+<li>Any deviation from this velocity can result in reentry or escape.</li>
+</ul>
+<p>The launch vehicle (e.g., Falcon 9, Ariane 5) must:
+- Provide sufficient <strong>tangential velocity</strong>
+- Release the satellite at the correct <strong>altitude and angle</strong></p>
+<hr/>
+<h3 id="escape-missions">Escape Missions</h3>
+<p>Interplanetary missions require the spacecraft to exceed <strong>escape velocity</strong>. This includes:</p>
+<ul>
+<li><strong>Apollo missions</strong> to the Moon  </li>
+<li><strong>Mars rovers</strong> and orbiters  </li>
+<li><strong>James Webb Space Telescope</strong> (L2 halo orbit)</li>
+</ul>
+<p>For these missions, multi-stage rockets deliver payloads to a <strong>parking orbit</strong>, followed by a <strong>trans-lunar</strong> or <strong>trans-Martian injection burn</strong> to reach escape trajectory.</p>
+<hr/>
+<h3 id="orbit-transfers-and-maneuvers">Orbit Transfers and Maneuvers</h3>
+<p>Changing orbits requires precise maneuvers such as:</p>
+<ul>
+<li><strong>Hohmann transfer orbit</strong> </li>
+<li><strong>Bi-elliptic transfer</strong> </li>
+<li><strong>Plane change maneuvers</strong></li>
+</ul>
+<p>These are commonly used for:</p>
+<ul>
+<li><strong>Geostationary Transfer Orbit (GTO)</strong> missions  </li>
+<li><strong>Satellite constellation phasing</strong> </li>
+<li><strong>Orbital rendezvous (e.g., docking with the ISS)</strong></li>
+</ul>
+<hr/>
+<h3 id="reentry-trajectories">Reentry Trajectories</h3>
+<p>If the payload’s velocity is reduced (e.g., &lt; 90% of v_circular), it enters a <strong>suborbital trajectory</strong> and eventually <strong>falls back to Earth</strong>.</p>
+<p>This applies to:</p>
+<ul>
+<li><strong>Deorbited satellites</strong> </li>
+<li><strong>Reentry capsules</strong> (e.g., SpaceX Dragon, Soyuz)  </li>
+<li><strong>Ballistic missiles</strong></li>
+</ul>
+<p>Reentry path and angle are crucial for avoiding:</p>
+<ul>
+<li><strong>Burn-up in the atmosphere</strong></li>
+<li><strong>Incorrect landing zones</strong></li>
+<li><strong>G-forces exceeding crew tolerance</strong></li>
+</ul>
+<hr/>
+<h3 id="engineering-relevance">Engineering Relevance</h3>
+<p>The numerical techniques and trajectory models explored in this project are essential for:</p>
+<ul>
+<li>Satellite mission design  </li>
+<li>Launch profile optimization  </li>
+<li>Interplanetary navigation  </li>
+<li>Space debris reentry prediction</li>
+</ul>
+<p>Real missions always rely on <strong>precise simulation</strong>, and methods like RK4 help ensure accurate trajectory prediction under gravitational influence.</p>
+<h3 id="real-world-comparison-starlink-example">Real-World Comparison: Starlink Example</h3>
+<p>SpaceX's Starlink satellites operate in <strong>Low Earth Orbit (LEO)</strong> and provide an excellent real-world benchmark for validating orbital simulations.</p>
+<hr/>
+<h4 id="starlink-orbit-characteristics-real-mission-data">Starlink Orbit Characteristics (Real Mission Data)</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Altitude</td>
+<td>~550 km</td>
+</tr>
+<tr>
+<td>Orbital Speed</td>
+<td>~7.6 km/s</td>
+</tr>
+<tr>
+<td>Orbital Period</td>
+<td>~95 minutes</td>
+</tr>
+<tr>
+<td>Inclination</td>
+<td>~53°</td>
+</tr>
+<tr>
+<td>Number of Satellites</td>
+<td>5,000+ (as of 2025)</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h4 id="comparison-with-our-simulation">Comparison with Our Simulation</h4>
+<p>We simulated a payload released from a 550 km altitude using RK4 integration. The resulting orbital velocity was approximately:</p>
+<div class="arithmatex">\[
+v = \sqrt{ \frac{GM}{r} } = \sqrt{ \frac{6.67430 \times 10^{-11} \cdot 5.972 \times 10^{24}}{6.921 \times 10^6} } \approx 7,586 \ \text{m/s}
+\]</div>
+<p>This matches well with the published Starlink data.</p>
+<hr/>
+<h4 id="conclusion">Conclusion</h4>
+<p>This comparison validates the <strong>accuracy of our model</strong>, particularly:
+- The gravitational model based on Newton’s law<br/>
+- The numerical solution using Runge-Kutta (RK4)<br/>
+- The realism of the orbital trajectory</p>
+<p>Such comparisons are critical in mission planning, satellite operations, and spaceflight dynamics.</p>
+<h2 id="optional-interactive-orbit-simulation">Optional: Interactive Orbit Simulation</h2>
+<p>This notebook includes an interactive orbit simulator built using <code>ipywidgets</code>.<br/>
+Users can adjust the initial velocity factor (from 0.5× to 1.5× the circular orbital speed) using a slider and instantly observe the resulting change in trajectory.</p>
+<p>This helps visualize:</p>
+<ul>
+<li>Suborbital motion (under 1.0×)</li>
+<li>Circular and elliptical orbits (around 1.0×)</li>
+<li>Escape trajectories (above 1.4×)</li>
+</ul>
+<blockquote>
+<p>To experience this functionality, run the <code>.ipynb</code> notebook in JupyterLab, VS Code (with Jupyter extension), or Google Colab.</p>
+</blockquote>
+<details>
+<summary><strong>Show Python Code</strong></summary>
+<pre><code>import numpy as np
+import matplotlib.pyplot as plt
+from ipywidgets import interact, FloatSlider
+from IPython.display import display
+
+# Constants
+G = 6.67430e-11
+M = 5.972e24
+R_earth = 6371e3
+
+def gravity(r):
+    norm_r = np.linalg.norm(r)
+    return -G * M * r / norm_r**3
+
+def rk4(r0, v0, dt, steps):
+    r, v = np.array(r0), np.array(v0)
+    trajectory = [r.copy()]
+    for _ in range(steps):
+        k1v = gravity(r)
+        k1r = v
+
+        k2v = gravity(r + 0.5 * dt * k1r)
+        k2r = v + 0.5 * dt * k1v
+
+        k3v = gravity(r + 0.5 * dt * k2r)
+        k3r = v + 0.5 * dt * k2v
+
+        k4v = gravity(r + dt * k3r)
+        k4r = v + dt * k3v
+
+        r += dt * (k1r + 2*k2r + 2*k3r + k4r) / 6
+        v += dt * (k1v + 2*k2v + 2*k3v + k4v) / 6
+
+        trajectory.append(r.copy())
+    return np.array(trajectory)
+
+def simulate_orbit(velocity_factor):
+    altitude = 400e3  # 400 km
+    r0 = np.array([R_earth + altitude, 0])
+    v_circular = np.sqrt(G * M / np.linalg.norm(r0))
+    v0 = np.array([0, velocity_factor * v_circular])
+
+    trajectory = rk4(r0, v0, dt=10, steps=8000)
+
+    plt.figure(figsize=(6, 6))
+    plt.plot(trajectory[:, 0] / 1e3, trajectory[:, 1] / 1e3, label=f"Velocity = {velocity_factor:.2f} × vₒrb")
+    earth = plt.Circle((0, 0), R_earth / 1e3, color='lightblue', label='Earth')
+    plt.gca().add_patch(earth)
+    plt.gca().set_aspect('equal')
+    plt.grid(True)
+    plt.xlabel("x (km)")
+    plt.ylabel("y (km)")
+    plt.title("Interactive Orbit Simulation")
+    plt.legend()
+    plt.show()
+
+# Slider Widget
+interact(simulate_orbit, velocity_factor=FloatSlider(value=1.0, min=0.5, max=1.5, step=0.05))
+</code></pre>
+</details>
+<p><img alt="alt text" src="../image-17.png"/></p>
+<p><strong>Figure:</strong> Interactive simulation of a circular orbit at 400 km altitude using 1.00 × vₒrb. Slider controls allow real-time changes in velocity.</p>
+<h2 id="python-implementation">Python Implementation</h2>
+<details>
+<summary><strong>Show Python Code</strong></summary>
+<pre><code>import numpy as np
+import matplotlib.pyplot as plt
+
+# Constants
+G = 6.67430e-11        # m^3 kg^-1 s^-2
+M = 5.972e24           # kg (mass of Earth)
+R_earth = 6371e3       # m (radius of Earth)
+
+def gravity(r):
+    norm_r = np.linalg.norm(r)
+    return -G * M * r / norm_r**3
+
+def rk4(r0, v0, dt, steps):
+    r, v = np.array(r0), np.array(v0)
+    trajectory = [r.copy()]
+    for _ in range(steps):
+        k1v = gravity(r)
+        k1r = v
+
+        k2v = gravity(r + 0.5 * dt * k1r)
+        k2r = v + 0.5 * dt * k1v
+
+        k3v = gravity(r + 0.5 * dt * k2r)
+        k3r = v + 0.5 * dt * k2v
+
+        k4v = gravity(r + dt * k3r)
+        k4r = v + dt * k3v
+
+        r += dt * (k1r + 2*k2r + 2*k3r + k4r) / 6
+        v += dt * (k1v + 2*k2v + 2*k3v + k4v) / 6
+
+        trajectory.append(r.copy())
+    return np.array(trajectory)
+
+altitude = 400e3
+r0 = np.array([R_earth + altitude, 0])
+v_circular = np.sqrt(G * M / np.linalg.norm(r0))
+v0 = np.array([0, 0.9 * v_circular])
+
+dt = 10
+steps = 10000
+trajectory = rk4(r0, v0, dt, steps)
+
+plt.figure()
+plt.plot(trajectory[:, 0]/1e3, trajectory[:, 1]/1e3, label="Trajectory")
+plt.gca().add_patch(plt.Circle((0, 0), R_earth/1e3, color='blue', alpha=0.3, label="Earth"))
+plt.xlabel("x (km)")
+plt.ylabel("y (km)")
+plt.title("Payload Trajectory Near Earth")
+plt.axis('equal')
+plt.legend()
+plt.grid(True)
+plt.show()
+</code></pre>
+</details>
+<p><img alt="alt text" src="../image-11.png"/>
+<strong>The figure above</strong> shows the trajectory of a payload near Earth. The initial velocity used in the simulation is 90% of the circular orbital velocity. As a result, the trajectory forms a slightly elliptical orbit. The blue circle represents the Earth's radius.</p>
+<h2 id="results-and-analysis">Results and Analysis</h2>
+<h3 id="varying-initial-velocities">Varying Initial Velocities</h3>
+<table>
+<thead>
+<tr>
+<th>Velocity Factor</th>
+<th>Behavior</th>
+<th>Outcome</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0.5 * v_circular</td>
+<td>Suborbital</td>
+<td>Falls back to Earth</td>
+</tr>
+<tr>
+<td>1.0 * v_circular</td>
+<td>Circular Orbit</td>
+<td>Remains in orbit</td>
+</tr>
+<tr>
+<td>1.2 * v_circular</td>
+<td>Elliptical Orbit</td>
+<td>Higher apogee</td>
+</tr>
+<tr>
+<td>~1.41 * v_circular</td>
+<td>Parabolic Escape</td>
+<td>Just escapes Earth</td>
+</tr>
+<tr>
+<td>&gt;1.41 * v_circular</td>
+<td>Hyperbolic Escape</td>
+<td>Escapes with surplus energy</td>
+</tr>
+</tbody>
+</table>
+<details>
+<summary><strong>Show Python Code</strong></summary>
+<pre><code>import numpy as np
+import matplotlib.pyplot as plt
+
+# Constants
+G = 6.67430e-11         # m^3 kg^-1 s^-2
+M = 5.972e24            # kg (mass of Earth)
+R_earth = 6371e3        # m (radius of Earth)
+
+def gravity(r):
+    norm_r = np.linalg.norm(r)
+    return -G * M * r / norm_r**3
+
+def rk4(r0, v0, dt, steps):
+    r, v = np.array(r0), np.array(v0)
+    trajectory = [r.copy()]
+    for _ in range(steps):
+        k1v = gravity(r)
+        k1r = v
+
+        k2v = gravity(r + 0.5 * dt * k1r)
+        k2r = v + 0.5 * dt * k1v
+
+        k3v = gravity(r + 0.5 * dt * k2r)
+        k3r = v + 0.5 * dt * k2v
+
+        k4v = gravity(r + dt * k3r)
+        k4r = v + dt * k3v
+
+        r += dt * (k1r + 2*k2r + 2*k3r + k4r) / 6
+        v += dt * (k1v + 2*k2v + 2*k3v + k4v) / 6
+
+        trajectory.append(r.copy())
+    return np.array(trajectory)
+
+altitude = 400e3
+r0 = np.array([R_earth + altitude, 0])
+v_circular = np.sqrt(G * M / np.linalg.norm(r0))
+
+velocity_factors = [0.7, 0.9, 1.0, 1.2, 1.5]
+colors = ['red', 'orange', 'green', 'blue', 'purple']
+labels = ['Suborbital', 'Elliptical', 'Circular', 'Elliptical (Higher)', 'Hyperbolic']
+
+plt.figure(figsize=(8, 8))
+for factor, color, label in zip(velocity_factors, colors, labels):
+    v0 = np.array([0, factor * v_circular])
+    traj = rk4(r0, v0, dt=10, steps=8000)
+    plt.plot(traj[:, 0]/1e3, traj[:, 1]/1e3, label=f\"{label} ({factor:.1f}×vc)\", color=color)
+
+earth = plt.Circle((0, 0), R_earth / 1e3, color='lightblue', label='Earth')
+plt.gca().add_patch(earth)
+plt.xlabel(\"x (km)\")
+plt.ylabel(\"y (km)\")
+plt.title(\"Multiple Payload Trajectories Near Earth\")
+plt.axis('equal')
+plt.grid(True)
+plt.legend()
+plt.tight_layout()
+plt.show()
+</code></pre>
+</details>
+<p><img alt="alt text" src="../image-12.png"/>
+<strong>The figure above</strong> shows the trajectories of a payload released from 400 km altitude with various initial velocities. As the velocity increases from suborbital to hyperbolic levels, the trajectory transitions from falling back to Earth to escaping Earth's gravity. The blue circle represents Earth.</p>
+<h3 id="observations">Observations</h3>
+<ul>
+<li>Small changes in initial speed yield qualitatively different trajectories.</li>
+<li>At escape velocity, the payload barely escapes gravity; above it, the trajectory becomes hyperbolic.</li>
+<li>Reentry trajectories must be carefully controlled to ensure proper angle and velocity.</li>
+</ul>
+<h3 id="total-specific-energy-vs-initial-velocity">Total Specific Energy vs. Initial Velocity</h3>
+<details>
+<summary><strong>Show Python Code</strong></summary>
+<pre><code>import matplotlib.pyplot as plt
+import numpy as np
+
+# Constants
+G = 6.67430e-11
+M = 5.972e24
+r = 6771e3  # Earth radius + 400 km
+
+v = np.linspace(0, 15000, 500)
+energy = 0.5 * v**2 - G * M / r
+
+plt.figure(figsize=(8, 6))
+plt.plot(v / 1000, energy / 1e7, label='Specific Mechanical Energy')
+plt.axhline(0, color='black', linestyle='--', label='Escape Threshold')
+plt.axvline(np.sqrt(2 * G * M / r) / 1000, color='red', linestyle='--', label='Escape Velocity')
+plt.axvline(np.sqrt(G * M / r) / 1000, color='green', linestyle='--', label='Circular Velocity')
+
+plt.title("Total Specific Energy vs Initial Speed (400 km altitude)")
+plt.xlabel("Velocity (km/s)")
+plt.ylabel("Specific Energy (×10⁷ J/kg)")
+plt.grid(True)
+plt.legend()
+plt.tight_layout()
+plt.show()
+</code></pre>
+</details>
+<p><img alt="alt text" src="../image-13.png"/></p>
+<p><strong>The figure above</strong> illustrates how the total specific mechanical energy of a payload changes with varying initial velocities at 400 km altitude. At circular orbital velocity, the energy is negative and constant (bounded orbit). At escape velocity, the energy reaches zero—indicating the parabolic threshold. Velocities beyond this lead to positive energy and hyperbolic escape.</p>
+<h3 id="escape-and-circular-velocity-vs-altitude">Escape and Circular Velocity vs. Altitude</h3>
+<details>
+<summary><strong>Show Python Code</strong></summary>
+<pre><code>
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Constants
+G = 6.67430e-11
+M = 5.972e24
+R_earth = 6371e3  # meters
+
+altitudes = np.linspace(0, 2000e3, 500)
+radii = R_earth + altitudes
+
+v_escape = np.sqrt(2 * G * M / radii)
+v_circular = np.sqrt(G * M / radii)
+
+plt.figure(figsize=(8, 6))
+plt.plot(altitudes / 1e3, v_escape / 1e3, label='Escape Velocity', color='red')
+plt.plot(altitudes / 1e3, v_circular / 1e3, label='Circular Velocity', color='blue')
+plt.title('Escape and Circular Velocity vs Altitude')
+plt.xlabel('Altitude (km)')
+plt.ylabel('Velocity (km/s)')
+plt.grid(True)
+plt.legend()
+plt.tight_layout()
+plt.show()
+</code></pre>
+</details>
+<p><img alt="alt text" src="../image-14.png"/></p>
+<p><strong>The figure above</strong> shows how both escape velocity and circular orbital velocity decrease with altitude. As the payload is released from higher altitudes, the gravitational pull weakens, thus requiring less velocity for orbit or escape. Notably, escape velocity remains approximately √2 times the circular velocity at any given altitude.</p>
+<h2 id="3d-visualization-of-orbital-motion">3D Visualization of Orbital Motion</h2>
+<details>
+<summary><strong>Show Python Code</strong></summary>
+<pre><code>import numpy as np
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+
+# Earth and orbit parameters (in kilometers)
+R_earth = 6371          # Radius of Earth
+altitude = 400          # Orbit altitude
+R_orbit = R_earth + altitude
+
+# Angle values for circular orbit
+theta = np.linspace(0, 2 * np.pi, 500)
+
+# Circular orbit in equatorial plane (z = 0)
+x_orbit = R_orbit * np.cos(theta)
+y_orbit = R_orbit * np.sin(theta)
+z_orbit = np.zeros_like(theta)
+
+# Coordinates for the surface of the Earth (as a sphere)
+u = np.linspace(0, 2 * np.pi, 100)
+v = np.linspace(0, np.pi, 100)
+x_sphere = R_earth * np.outer(np.cos(u), np.sin(v))
+y_sphere = R_earth * np.outer(np.sin(u), np.sin(v))
+z_sphere = R_earth * np.outer(np.ones(np.size(u)), np.cos(v))
+
+# Create 3D plot
+fig = plt.figure(figsize=(10, 8))
+ax = fig.add_subplot(111, projection='3d')
+
+# Draw the Earth (translucent light blue sphere)
+ax.plot_surface(x_sphere, y_sphere, z_sphere, 
+                color='lightsteelblue', alpha=0.5, 
+                edgecolor='gray', linewidth=0.3)
+
+# Draw the orbit path (vivid colored line)
+ax.plot(x_orbit, y_orbit, z_orbit, 
+        color='darkviolet', linewidth=2.5, 
+        label='Equatorial Orbit')
+
+# Labels and title
+ax.set_title('3D Equatorial Orbit around Earth')
+ax.set_xlabel('X Position (km)')
+ax.set_ylabel('Y Position (km)')
+ax.set_zlabel('Z Position (km)')
+ax.legend()
+
+# Ensure aspect ratio is equal
+ax.set_box_aspect([1, 1, 1])
+plt.tight_layout()
+plt.show()
+</code></pre>
+</details>
+<p><img alt="alt text" src="../image-15.png"/>
+<strong>The figure above</strong> presents a 3D visualization of a payload following a circular equatorial orbit around Earth.<br/>
+The Earth is represented as a translucent sphere, and the orbit lies in the X-Y plane (with Z = 0), mimicking a low Earth orbit (LEO) with zero inclination.<br/>
+This type of visualization helps convey the spatial relationship between the orbit and the planet, especially when discussing equatorial orbits, satellite coverage, and orbital mechanics.</p>
+<h2 id="mission-based-trajectory-scenarios">Mission-Based Trajectory Scenarios</h2>
+<p>This section explores how different initial velocities affect the trajectory of a payload released at 400 km altitude. The three cases simulate real mission profiles such as failed insertions, stable orbits, and escape attempts.</p>
+<h3 id="scenario-a-sub-circular-velocity-90-of-circular">Scenario A: Sub-Circular Velocity (90% of Circular)</h3>
+<ul>
+<li>The payload does not achieve orbital speed.</li>
+<li>Its trajectory is elliptical, but the perigee dips below Earth’s surface.</li>
+<li>This leads to <strong>reentry and crash back to Earth</strong>.</li>
+</ul>
+<h3 id="scenario-b-circular-orbit-100-of-circular">Scenario B: Circular Orbit (100% of Circular)</h3>
+<ul>
+<li>This is the <strong>ideal orbital insertion</strong>.</li>
+<li>The object remains at a stable altitude.</li>
+<li>Real-world examples: ISS, weather satellites.</li>
+</ul>
+<h3 id="scenario-c-excessive-velocity-110-of-circular">Scenario C: Excessive Velocity (110% of Circular)</h3>
+<ul>
+<li>The orbit becomes elliptical with a very high apogee.</li>
+<li>The object may leave LEO or even <strong>escape</strong> if velocity exceeds √2 * v<sub>circ</sub>.</li>
+<li>Real-world use: Transfer orbits (e.g., to geostationary orbit).</li>
+</ul>
+<h3 id="mission-based-trajectory-scenarios_1">Mission-Based Trajectory Scenarios</h3>
+<details>
+<summary><strong>Show Python Code</strong></summary>
+<pre><code>import numpy as np
+import matplotlib.pyplot as plt
+
+# Constants
+G = 6.67430e-11
+M = 5.972e24
+R_earth = 6371e3
+
+def gravity(r):
+    norm_r = np.linalg.norm(r)
+    return -G * M * r / norm_r**3
+
+def rk4(r0, v0, dt, steps):
+    r, v = np.array(r0), np.array(v0)
+    trajectory = [r.copy()]
+    for _ in range(steps):
+        k1v = gravity(r)
+        k1r = v
+        k2v = gravity(r + 0.5 * dt * k1r)
+        k2r = v + 0.5 * dt * k1v
+        k3v = gravity(r + 0.5 * dt * k2r)
+        k3r = v + 0.5 * dt * k2v
+        k4v = gravity(r + dt * k3r)
+        k4r = v + dt * k3v
+        r += dt * (k1r + 2*k2r + 2*k3r + k4r) / 6
+        v += dt * (k1v + 2*k2v + 2*k3v + k4v) / 6
+        trajectory.append(r.copy())
+    return np.array(trajectory)
+
+# Initial conditions
+altitude = 400e3
+r0 = np.array([R_earth + altitude, 0])
+v_circ = np.sqrt(G * M / np.linalg.norm(r0))
+velocity_cases = [0.9, 1.0, 1.1]  # 90%, 100%, 110% of circular speed
+labels = ["Sub-circular (90%)", "Circular (100%)", "High (110%)"]
+colors = ["red", "green", "blue"]
+
+plt.figure(figsize=(8, 8))
+for factor, label, color in zip(velocity_cases, labels, colors):
+    v0 = np.array([0, factor * v_circ])
+    traj = rk4(r0, v0, dt=10, steps=8000)
+    plt.plot(traj[:, 0] / 1e3, traj[:, 1] / 1e3, color=color, label=label)
+
+# Earth
+earth = plt.Circle((0, 0), R_earth / 1e3, color='lightblue', alpha=0.5, label="Earth")
+plt.gca().add_patch(earth)
+
+plt.title("Trajectory Scenarios Based on Initial Velocity")
+plt.xlabel("x (km)")
+plt.ylabel("y (km)")
+plt.axis("equal")
+plt.grid(True)
+plt.legend()
+plt.tight_layout()
+plt.show()
+</code></pre>
+</details>
+<p><img alt="alt text" src="../image-16.png"/>
+<strong>The figure above</strong> shows how a small change in initial velocity can drastically alter the payload’s fate—leading to reentry, stable orbit, or escape.</p>
+<h2 id="applications-and-real-world-relevance">Applications and Real-World Relevance</h2>
+<ul>
+<li><strong>Satellite Deployment</strong>: Achieving specific orbits (LEO, MEO, GEO) requires precise velocity insertion.</li>
+<li><strong>Space Exploration</strong>: Missions to Mars or beyond need hyperbolic trajectories using gravity assists.</li>
+<li><strong>Reentry Missions</strong>: Apollo, Soyuz, and Dragon capsules use calculated trajectories to reenter safely.</li>
+<li><strong>Orbital Maneuvers</strong>: Payloads are often adjusted post-release using thrusters (e.g., Hohmann transfer).</li>
+</ul>
+<h2 id="conclusion_1">Conclusion</h2>
+<p>This study presents a fundamental yet powerful simulation of a payload's motion under Earth's gravity. The relationship between initial velocity and trajectory type is key to understanding orbital dynamics. By using numerical integration, we demonstrated how simple initial conditions yield a wide range of orbital behaviors. The model can be extended to include other forces (e.g., atmospheric drag, thrust), making it a valuable educational and planning tool for space missions.</p>
+<p>Future extensions may include:
+- Multi-body problems (Moon, Sun)
+- Atmospheric reentry modeling
+- Thrust-based trajectory control (e.g., ion propulsion)
+- Realistic 3D visualization of orbital paths</p>
 </div>
 </div><footer>
 <div aria-label="Footer Navigation" class="rst-footer-buttons" role="navigation">

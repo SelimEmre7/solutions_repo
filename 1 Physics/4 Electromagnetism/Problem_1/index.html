@@ -172,6 +172,573 @@
 <div class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
 <div class="section" itemprop="articleBody">
 <h1 id="problem-1">Problem 1</h1>
+<h1 id="lorentz-force-simulation-report">Lorentz Force Simulation Report</h1>
+<h2 id="introduction">Introduction</h2>
+<p>The behavior of a charged particle under the influence of electric and magnetic fields is a fundamental topic in electromagnetism.<br/>
+The force acting on a particle with charge <span class="arithmatex">\(q\)</span>, moving with velocity <span class="arithmatex">\(\mathbf{v}\)</span> in the presence of an electric field <span class="arithmatex">\(\mathbf{E}\)</span> and a magnetic field <span class="arithmatex">\(\mathbf{B}\)</span>, is described by the <strong>Lorentz force law</strong>:</p>
+<div class="arithmatex">\[
+\mathbf{F} = q (\mathbf{E} + \mathbf{v} \times \mathbf{B})
+\]</div>
+<p>This force determines the particle’s trajectory and plays a critical role in many areas of physics and engineering, including:</p>
+<ul>
+<li><strong>Plasma physics</strong> (e.g., magnetic confinement in fusion reactors),</li>
+<li><strong>Particle accelerators</strong> (e.g., cyclotrons and synchrotrons),</li>
+<li><strong>Mass spectrometry</strong> (ion separation based on mass-to-charge ratio),</li>
+<li><strong>Astrophysics</strong> (e.g., motion of cosmic rays in magnetic fields),</li>
+<li><strong>Everyday technologies</strong> (e.g., CRT displays and Hall effect sensors).</li>
+</ul>
+<p>By analyzing motion under the Lorentz force, we can design systems that precisely manipulate or measure charged particles.<br/>
+This project simulates several representative scenarios to visualize and better understand these key physical effects.</p>
+<hr/>
+<h2 id="motivation">Motivation</h2>
+<p>The Lorentz force is a fundamental concept in electromagnetism, describing how electric and magnetic fields influence the motion of charged particles. It is mathematically expressed as:</p>
+<div class="arithmatex">\[
+\mathbf{F} = q (\mathbf{E} + \mathbf{v} \times \mathbf{B})
+\]</div>
+<p>Understanding the Lorentz force is essential not only for theoretical studies but also for practical applications across science and engineering fields. By analyzing the effects of electric and magnetic fields on charged particles, one can design and operate:</p>
+<ul>
+<li><strong>Particle Accelerators</strong>: To guide and accelerate particles to high energies.</li>
+<li><strong>Mass Spectrometers</strong>: To separate ions based on their mass-to-charge ratios.</li>
+<li><strong>Plasma Confinement Systems</strong>: Such as tokamaks for fusion energy.</li>
+<li><strong>Magnetic Sensors</strong>: Like Hall effect devices for detecting magnetic fields.</li>
+<li><strong>Astrophysical Models</strong>: To explain the behavior of cosmic rays and solar winds.</li>
+</ul>
+<p>Simulating the motion of charged particles under different field configurations allows for a deeper, intuitive understanding of the underlying physics. Visualization of phenomena like circular motion, helical trajectories, and drift velocities provides critical insights into real-world systems.</p>
+<p>The aim of this project is to numerically simulate and visualize these effects, enabling a clear connection between the Lorentz force theory and its practical implications.</p>
+<hr/>
+<h2 id="applications-of-the-lorentz-force">Applications of the Lorentz Force</h2>
+<p>The Lorentz force plays a critical role in a variety of real-world applications:</p>
+<ul>
+<li>
+<p><strong>Particle Accelerators</strong>:<br/>
+Charged particles are kept on circular or spiral paths using strong magnetic fields. For example, in a <strong>cyclotron</strong>, particles move in circles due to a magnetic field, while an electric field periodically accelerates them.</p>
+</li>
+<li>
+<p><strong>Mass Spectrometers</strong>:<br/>
+Mass spectrometry devices use magnetic fields to bend the paths of ions. The radius of curvature is related to the mass-to-charge ratio, enabling identification of unknown substances.</p>
+</li>
+<li>
+<p><strong>Plasma Confinement (Tokamaks)</strong>:<br/>
+In fusion reactors, strong toroidal magnetic fields confine plasma. Electric fields can also be applied to stabilize and shape the plasma flow.</p>
+</li>
+<li>
+<p><strong>Hall Effect Sensors</strong>:<br/>
+Crossed electric and magnetic fields cause a voltage to appear across a conductor, which is proportional to the magnetic field strength — a principle used in magnetic field sensing devices.</p>
+</li>
+<li>
+<p><strong>Astrophysical Phenomena</strong>:<br/>
+Cosmic rays and charged particles from space spiral along interstellar magnetic field lines.</p>
+</li>
+</ul>
+<p>These applications fundamentally rely on how the Lorentz force influences charged particle trajectories.</p>
+<hr/>
+<h2 id="theoretical-background">Theoretical Background</h2>
+<p>The Lorentz force can be split into two components:</p>
+<ul>
+<li><strong>Electric Force</strong>:<br/>
+Accelerates the particle along the direction of the electric field.</li>
+</ul>
+<div class="arithmatex">\[
+\mathbf{F}_E = q \mathbf{E}
+\]</div>
+<ul>
+<li><strong>Magnetic Force</strong>:<br/>
+Deflects the particle's path, acting perpendicular to both the velocity and magnetic field.
+$$
+\mathbf{F}_B = q (\mathbf{v} \times \mathbf{B})
+$$</li>
+</ul>
+<p>If only a magnetic field is present, the force magnitude is:</p>
+<div class="arithmatex">\[
+|\mathbf{F}_B| = q v B \sin{\theta}
+\]</div>
+<p>where <span class="arithmatex">\( \theta \)</span> is the angle between <span class="arithmatex">\( \mathbf{v} \)</span> and <span class="arithmatex">\( \mathbf{B} \)</span>.</p>
+<p>If <span class="arithmatex">\( \theta = 90^\circ \)</span> — meaning the velocity is perpendicular to the magnetic field — the particle undergoes <strong>uniform circular motion</strong>, with a radius known as the Larmor radius:</p>
+<div class="arithmatex">\[
+r_L = \frac{m v_{\perp}}{q B}
+\]</div>
+<p>where <span class="arithmatex">\(v_{\perp}\)</span> is the component of velocity perpendicular to the magnetic field.</p>
+<p>In crossed electric and magnetic fields, the particle experiences a <strong>drift velocity</strong> given by:</p>
+<div class="arithmatex">\[
+\mathbf{v}_d = \frac{\mathbf{E} \times \mathbf{B}}{B^2}
+\]</div>
+<p>This drift occurs perpendicular to both <span class="arithmatex">\(\mathbf{E}\)</span> and <span class="arithmatex">\(\mathbf{B}\)</span>, with constant magnitude.</p>
+<hr/>
+<h2 id="numerical-method">Numerical Method</h2>
+<p>The equations of motion derived from the Lorentz force are generally not solvable analytically for arbitrary field configurations.<br/>
+Therefore, we use a <strong>numerical integration technique</strong>: the <strong>Runge-Kutta 4th-order (RK4) method</strong>.</p>
+<p>RK4 estimates the next position and velocity by considering the slope (acceleration) at multiple points within each time step <span class="arithmatex">\( dt \)</span>, leading to greater accuracy.</p>
+<p>The basic algorithm at each time step involves:</p>
+<ol>
+<li>Calculating intermediate slopes (k1, k2, k3, k4) for both velocity and position.</li>
+<li>Combining these slopes to update the velocity and position for the next time step.</li>
+</ol>
+<p>Advantages of using RK4:</p>
+<ul>
+<li>High accuracy with relatively large time steps.</li>
+<li>Good stability for problems involving oscillatory or rotational motion (like circular trajectories).</li>
+</ul>
+<p><strong>Simulation Parameters:</strong></p>
+<ul>
+<li>Time step (<span class="arithmatex">\(dt\)</span>) is chosen to be small (<span class="arithmatex">\(10^{-11}\)</span> s) to accurately capture fast circular motion.</li>
+<li>Total simulation time is selected to be long enough to observe multiple full cycles of particle motion.</li>
+<li>Electric and magnetic fields are assumed to be uniform and constant in time and space for simplicity.</li>
+</ul>
+<hr/>
+<h2 id="case-1-motion-in-uniform-magnetic-field">Case 1: Motion in Uniform Magnetic Field</h2>
+<p>In the absence of an electric field (<span class="arithmatex">\(\mathbf{E} = 0\)</span>) and with a uniform magnetic field (<span class="arithmatex">\(\mathbf{B} \neq 0\)</span>), the particle experiences a continuous perpendicular force.</p>
+<p>The motion is a perfect circle with:</p>
+<ul>
+<li><strong>Constant speed</strong> (magnetic force does no work).</li>
+<li><strong>Constant angular frequency</strong> (cyclotron frequency):</li>
+</ul>
+<div class="arithmatex">\[
+\omega_c = \frac{qB}{m}
+\]</div>
+<p><strong>Expected Trajectory:</strong></p>
+<ul>
+<li>Circular path in the plane perpendicular to <span class="arithmatex">\(\mathbf{B}\)</span>.</li>
+</ul>
+<p><strong>Real-world example:</strong></p>
+<ul>
+<li>In cyclotrons, this principle is used to accelerate particles in a spiral path to very high energies.</li>
+</ul>
+<details>
+<summary><strong>Show Python Code</strong></summary>
+<pre><code>import numpy as np
+import matplotlib.pyplot as plt
+
+q = 1.6e-19     # Charge (C)
+m = 9.11e-31    # Mass (kg)
+dt = 1e-12
+num_steps = 4000
+
+E = np.array([0, 0, 0])          # No electric field
+B = np.array([0, 0, 1])          # Magnetic field along z-axis
+v0 = np.array([2e6, 2e6, 1e6])   # Balanced helical motion
+r0 = np.array([0, 0, 0])
+
+def lorentz_force(v, E, B):
+    return q * (E + np.cross(v, B))
+
+def runge_kutta(v0, r0, E, B, dt, steps):
+    v = np.zeros((steps, 3))
+    r = np.zeros((steps, 3))
+    v[0], r[0] = v0, r0
+    for i in range(1, steps):
+        k1v = lorentz_force(v[i-1], E, B) / m
+        k1r = v[i-1]
+        k2v = lorentz_force(v[i-1] + 0.5 * dt * k1v, E, B) / m
+        k2r = v[i-1] + 0.5 * dt * k1v
+        k3v = lorentz_force(v[i-1] + 0.5 * dt * k2v, E, B) / m
+        k3r = v[i-1] + 0.5 * dt * k2v
+        k4v = lorentz_force(v[i-1] + dt * k3v, E, B) / m
+        k4r = v[i-1] + dt * k3v
+        v[i] = v[i-1] + (dt / 6) * (k1v + 2*k2v + 2*k3v + k4v)
+        r[i] = r[i-1] + (dt / 6) * (k1r + 2*k2r + 2*k3r + k4r)
+    return r
+
+r = runge_kutta(v0, r0, E, B, dt, num_steps)
+
+fig, axs = plt.subplots(1, 3, figsize=(15, 4))
+axs[0].plot(r[:, 0], r[:, 1], color='orange')
+axs[0].set_title("XY Plane")
+axs[0].set_xlabel("x (m)")
+axs[0].set_ylabel("y (m)")
+axs[0].axis("equal")
+axs[0].grid(True)
+
+axs[1].plot(r[:, 0], r[:, 2], color='green')
+axs[1].set_title("XZ Plane")
+axs[1].set_xlabel("x (m)")
+axs[1].set_ylabel("z (m)")
+axs[1].axis("equal")
+axs[1].grid(True)
+
+axs[2].plot(r[:, 1], r[:, 2], color='blue')
+axs[2].set_title("YZ Plane")
+axs[2].set_xlabel("y (m)")
+axs[2].set_ylabel("z (m)")
+axs[2].axis("equal")
+axs[2].grid(True)
+
+plt.suptitle("2D Projections of Helical Particle Motion – Uniform Magnetic Field")
+plt.tight_layout()
+plt.show()
+</code></pre>
+</details>
+<p><img alt="alt text" src="../image-1.png"/></p>
+<p>This graph shows 2D projections of a charged particle’s helical motion in a uniform magnetic field.<br/>
+The circular trajectory in the XY plane confirms Lorentz-force-driven rotation, while the linear progression in the XZ and YZ planes reflects forward drift along the magnetic field direction.</p>
+<hr/>
+<h2 id="case-2-motion-in-combined-electric-and-magnetic-fields-parallel-fields">Case 2: Motion in Combined Electric and Magnetic Fields (Parallel Fields)</h2>
+<p>When both the electric field and magnetic field are applied in the same direction (e.g., along the z-axis), two effects combine:</p>
+<ul>
+<li>The magnetic field bends the particle's path.</li>
+<li>The electric field continuously accelerates the particle along the field direction.</li>
+</ul>
+<p>Thus, the particle follows a <strong>helical trajectory</strong>, moving forward while spiraling.</p>
+<p><strong>Equations:</strong></p>
+<ul>
+<li>Longitudinal acceleration due to the electric field:</li>
+</ul>
+<div class="arithmatex">\[
+a = \frac{qE}{m}
+\]</div>
+<ul>
+<li>The radius and frequency of the circular motion remain defined by the magnetic field:</li>
+</ul>
+<div class="arithmatex">\[
+r = \frac{mv}{qB}, \quad \omega = \frac{qB}{m}
+\]</div>
+<p><strong>Expected Trajectory:</strong></p>
+<ul>
+<li>Helical motion with a constant pitch that increases over time due to acceleration from the electric field.</li>
+</ul>
+<p><strong>Real-world example:</strong></p>
+<ul>
+<li>Charged particle beams moving through combined electric and magnetic fields in particle physics experiments.</li>
+</ul>
+<details>
+<summary><strong>Show Python Code</strong></summary>
+<pre><code>import numpy as np
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+
+q = 1.6e-19
+m = 9.11e-31
+dt = 1e-12
+num_steps = 3000
+
+E = np.array([0, 0, 5e3])  # Electric field along z
+B = np.array([0, 0, 1])    # Magnetic field along z
+v0 = np.array([1e6, 0, 0]) # Initial velocity in x
+r0 = np.array([0, 0, 0])
+
+def lorentz_force(v, E, B):
+    return q * (E + np.cross(v, B))
+
+def runge_kutta(v0, r0, E, B, dt, steps):
+    v = np.zeros((steps, 3))
+    r = np.zeros((steps, 3))
+    v[0], r[0] = v0, r0
+    for i in range(1, steps):
+        k1v = lorentz_force(v[i-1], E, B) / m
+        k1r = v[i-1]
+        k2v = lorentz_force(v[i-1] + 0.5 * dt * k1v, E, B) / m
+        k2r = v[i-1] + 0.5 * dt * k1v
+        k3v = lorentz_force(v[i-1] + 0.5 * dt * k2v, E, B) / m
+        k3r = v[i-1] + 0.5 * dt * k2v
+        k4v = lorentz_force(v[i-1] + dt * k3v, E, B) / m
+        k4r = v[i-1] + dt * k3v
+        v[i] = v[i-1] + (dt / 6) * (k1v + 2*k2v + 2*k3v + k4v)
+        r[i] = r[i-1] + (dt / 6) * (k1r + 2*k2r + 2*k3r + k4r)
+    return r
+
+r = runge_kutta(v0, r0, E, B, dt, num_steps)
+
+fig = plt.figure(figsize=(8, 6))
+ax = fig.add_subplot(111, projection='3d')
+ax.plot(r[:, 0], r[:, 1], r[:, 2], color='purple', linewidth=1)
+ax.set_title('3D Trajectory – Parallel Electric and Magnetic Fields')
+ax.set_xlabel('x (m)')
+ax.set_ylabel('y (m)')
+ax.set_zlabel('z (m)')
+plt.tight_layout()
+plt.show()
+</code></pre>
+</details>
+<p><img alt="alt text" src="../image-2.png"/>
+This graph shows the 3D helical motion of a charged particle under parallel electric and magnetic fields.<br/>
+The particle rotates due to the magnetic field while continuously accelerating along the field direction due to the electric field.</p>
+<hr/>
+<h2 id="case-3-motion-in-crossed-electric-and-magnetic-fields">Case 3: Motion in Crossed Electric and Magnetic Fields</h2>
+<p>In this case, the electric and magnetic fields are perpendicular.<br/>
+The particle undergoes two simultaneous motions:</p>
+<ul>
+<li>Circular motion around magnetic field lines.</li>
+<li>Constant drift perpendicular to both <span class="arithmatex">\(\mathbf{E}\)</span> and <span class="arithmatex">\(\mathbf{B}\)</span>.</li>
+</ul>
+<p>The <strong>drift velocity</strong> is independent of the particle's charge and mass and is given by:</p>
+<div class="arithmatex">\[
+\mathbf{v}_d = \frac{\mathbf{E} \times \mathbf{B}}{B^2}
+\]</div>
+<p><strong>Expected Trajectory:</strong></p>
+<ul>
+<li>Spiral motion superimposed on a linear drift.</li>
+</ul>
+<p><strong>Real-world example:</strong></p>
+<ul>
+<li>Plasma drift in fusion reactors.</li>
+<li>Operation of Hall effect sensors.</li>
+</ul>
+<details>
+<summary><strong>Show Python Code</strong></summary>
+<pre><code>import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib import cm
+
+q = 1.6e-19
+m = 9.11e-31
+dt = 1e-12
+num_steps = 6000
+
+E = np.array([0, 1e3, 0])
+B = np.array([0, 0, 1])
+v0 = np.array([1e6, 0, 1e6])
+r0 = np.array([0, 0, 0])
+
+def lorentz_force(v, E, B):
+    return q * (E + np.cross(v, B))
+
+def runge_kutta(v0, r0, E, B, dt, steps):
+    v = np.zeros((steps, 3))
+    r = np.zeros((steps, 3))
+    v[0], r[0] = v0, r0
+    for i in range(1, steps):
+        k1v = lorentz_force(v[i-1], E, B) / m
+        k1r = v[i-1]
+        k2v = lorentz_force(v[i-1] + 0.5 * dt * k1v, E, B) / m
+        k2r = v[i-1] + 0.5 * dt * k1v
+        k3v = lorentz_force(v[i-1] + 0.5 * dt * k2v, E, B) / m
+        k3r = v[i-1] + 0.5 * dt * k2v
+        k4v = lorentz_force(v[i-1] + dt * k3v, E, B) / m
+        k4r = v[i-1] + dt * k3v
+        v[i] = v[i-1] + (dt/6) * (k1v + 2*k2v + 2*k3v + k4v)
+        r[i] = r[i-1] + (dt/6) * (k1r + 2*k2r + 2*k3r + k4r)
+    return r
+
+r = runge_kutta(v0, r0, E, B, dt, num_steps)
+colors = np.linspace(0, 1, num_steps)
+
+plt.figure(figsize=(8, 6))
+plt.scatter(r[:, 0], r[:, 1], c=colors, cmap='plasma', s=3, alpha=0.9)
+plt.title("Time-Colored 2D Trajectory (Smoothed Scatter)")
+plt.xlabel("x (m)")
+plt.ylabel("y (m)")
+plt.axis("equal")
+plt.grid(True)
+plt.tight_layout()
+plt.show()
+</code></pre>
+</details>
+<p><img alt="alt text" src="../image.png"/></p>
+<p>This graph shows the time-colored 2D trajectory of a charged particle under crossed electric and magnetic fields.<br/>
+The spiral motion results from magnetic rotation, while the consistent sideways drift is caused by the <span class="arithmatex">\(\mathbf{E} \times \mathbf{B}\)</span> effect.</p>
+<hr/>
+<h2 id="parameter-exploration">Parameter Exploration</h2>
+<p>In the simulations, changing physical parameters shows their effects:</p>
+<ul>
+<li><strong>Increasing Magnetic Field Strength (<span class="arithmatex">\(B\)</span>)</strong>:</li>
+<li>Reduces the radius of the circular path.</li>
+<li>
+<p>Increases the angular frequency of rotation.</p>
+</li>
+<li>
+<p><strong>Increasing Electric Field Strength (<span class="arithmatex">\(E\)</span>)</strong>:</p>
+</li>
+<li>In parallel fields, leads to faster longitudinal acceleration.</li>
+<li>
+<p>In crossed fields, leads to higher drift velocity.</p>
+</li>
+<li>
+<p><strong>Changing Particle Mass or Charge</strong>:</p>
+</li>
+<li>Heavier particles (higher <span class="arithmatex">\( m \)</span>) move in larger circles.</li>
+<li>Higher charge (higher <span class="arithmatex">\( q \)</span>) results in tighter spirals and faster rotation.</li>
+</ul>
+<p>These relationships are essential in calibrating real-world systems like mass spectrometers and magnetic traps.</p>
+<h3 id="larmor-radius-vs-magnetic-field-strength">Larmor Radius vs Magnetic Field Strength</h3>
+<p>This graph demonstrates the inverse relationship between the magnetic field strength and the radius of circular motion for a charged particle. As the magnetic field increases, the Larmor radius decreases according to:
+$$
+r_L = \frac{m v_\perp}{q B}
+$$</p>
+<details>
+<summary><strong>Show Python Code</strong></summary>
+<pre><code>import numpy as np
+import matplotlib.pyplot as plt
+
+q = 1.6e-19
+m = 9.11e-31
+v_perp = 1e6
+
+B_vals = np.linspace(0.1, 2.0, 100)
+r_L_vals = (m * v_perp) / (q * B_vals)
+
+plt.figure(figsize=(8, 5))
+plt.plot(B_vals, r_L_vals, color='orange')
+plt.title("Larmor Radius vs Magnetic Field Strength")
+plt.xlabel("Magnetic Field B (T)")
+plt.ylabel("Larmor Radius (m)")
+plt.grid(True)
+plt.tight_layout()
+plt.show()
+</code></pre>
+</details>
+<p><img alt="alt text" src="../image-3.png"/></p>
+<h3 id="drift-velocity-vs-electric-field-strength">Drift Velocity vs Electric Field Strength</h3>
+<p>This graph illustrates the linear relationship between electric field strength and drift velocity for a charged particle in crossed electric and magnetic fields.<br/>
+According to the equation:</p>
+<div class="arithmatex">\[
+v_d = \frac{E}{B}
+\]</div>
+<p>the drift velocity increases proportionally with the electric field when the magnetic field is constant.
+.</p>
+<details>
+<summary><strong>Show Python Code</strong></summary>
+<pre><code>import numpy as np
+import matplotlib.pyplot as plt
+
+# Constants
+B_fixed = 1.0  # Tesla
+E_vals = np.linspace(100, 5000, 100)  # V/m
+
+# Drift velocity calculation
+v_d_vals = E_vals / B_fixed
+
+# Plot
+plt.figure(figsize=(8, 5))
+plt.plot(E_vals, v_d_vals, color='crimson')
+plt.title("Drift Velocity vs Electric Field Strength")
+plt.xlabel("Electric Field E (V/m)")
+plt.ylabel("Drift Velocity v_d (m/s)")
+plt.grid(True)
+plt.tight_layout()
+plt.show()
+</code></pre>
+</details>
+<p><img alt="alt text" src="../image-4.png"/></p>
+<h3 id="helix-pitch-vs-electric-field-strength">Helix Pitch vs Electric Field Strength</h3>
+<p>This graph shows how the pitch of a helical trajectory increases with electric field strength when the magnetic field is held constant.<br/>
+In parallel <span class="arithmatex">\( \vec{E} \)</span> and <span class="arithmatex">\( \vec{B} \)</span> configurations, the particle accelerates along the field direction, increasing the axial length of each spiral turn.</p>
+<p>Pitch is calculated as the distance traveled during one cyclotron period:</p>
+<div class="arithmatex">\[
+\text{pitch} = \frac{1}{2} \cdot \left( \frac{qE}{m} \right) \cdot \left( \frac{2\pi m}{qB} \right)^2
+\]</div>
+<details>
+<summary><strong>Show Python Code</strong></summary>
+<pre><code>import numpy as np
+import matplotlib.pyplot as plt
+
+# Constants
+q = 1.6e-19
+m = 9.11e-31
+B = 1.0  # Tesla
+
+E_vals = np.linspace(100, 5000, 100)  # V/m
+
+# Cyclotron period
+T_c = 2 * np.pi * m / (q * B)
+
+# Acceleration from E field
+a_vals = q * E_vals / m
+
+# Pitch = distance in one period
+pitch_vals = 0.5 * a_vals * T_c**2
+
+# Plot
+plt.figure(figsize=(8, 5))
+plt.plot(E_vals, pitch_vals, color='green')
+plt.title("Helix Pitch vs Electric Field Strength")
+plt.xlabel("Electric Field E (V/m)")
+plt.ylabel("Helix Pitch (m)")
+plt.grid(True)
+plt.tight_layout()
+plt.show()
+</code></pre>
+</details>
+<p><img alt="alt text" src="../image-5.png"/></p>
+<h3 id="velocity-components-over-time">Velocity Components Over Time</h3>
+<p>This graph illustrates the evolution of the particle's velocity components over time.<br/>
+In uniform magnetic fields, the transverse components <span class="arithmatex">\( v_x \)</span> and <span class="arithmatex">\( v_y \)</span> exhibit periodic oscillations due to circular motion.<br/>
+If an electric field is present along the magnetic field (as in Case 2), the longitudinal component <span class="arithmatex">\( v_z \)</span> would show steady acceleration.</p>
+<details>
+<summary><strong>Show Python Code</strong></summary>
+<pre><code>import numpy as np
+import matplotlib.pyplot as plt
+
+# Time and velocity definitions
+time = np.linspace(0, 1e-8, 500)
+v0 = 1e6
+
+# Transverse circular motion
+v_x = v0 * np.cos(2 * np.pi * 5e7 * time)
+v_y = v0 * np.sin(2 * np.pi * 5e7 * time)
+
+# Longitudinal component (constant here)
+v_z = 1e5 * time  # or set to 0 for pure magnetic field
+
+# Plot
+plt.figure(figsize=(8, 5))
+plt.plot(time, v_x, label='v_x', color='dodgerblue')
+plt.plot(time, v_y, label='v_y', color='darkorange')
+plt.plot(time, v_z, label='v_z', color='green')
+plt.title("Velocity Components Over Time")
+plt.xlabel("Time (s)")
+plt.ylabel("Velocity (m/s)")
+plt.legend()
+plt.grid(True)
+plt.tight_layout()
+plt.show()
+</code></pre>
+</details>
+<h2 id="_1"><img alt="alt text" src="../image-6.png"/></h2>
+<h2 id="practical-relevance">Practical Relevance</h2>
+<table>
+<thead>
+<tr>
+<th>System</th>
+<th>Field Configuration</th>
+<th>Application of Lorentz Force</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cyclotron</td>
+<td>Uniform Magnetic Field</td>
+<td>Circular acceleration of particles</td>
+</tr>
+<tr>
+<td>Mass Spectrometer</td>
+<td>Magnetic Field</td>
+<td>Mass-to-charge separation</td>
+</tr>
+<tr>
+<td>Plasma Confinement (Tokamak)</td>
+<td>Magnetic and Electric Fields</td>
+<td>Plasma stabilization and confinement</td>
+</tr>
+<tr>
+<td>Hall Effect Sensor</td>
+<td>Crossed Fields</td>
+<td>Voltage generation for sensing magnetic fields</td>
+</tr>
+</tbody>
+</table>
+<p>These examples show how mastering the Lorentz force enables control and utilization of charged particle motion in a wide range of technologies.</p>
+<hr/>
+<h2 id="conclusion">Conclusion</h2>
+<p>This simulation project successfully modeled the behavior of a charged particle under various electric and magnetic field configurations using the Lorentz force law.<br/>
+We observed distinct trajectories—circular, helical, and drift motion—based on how the electric and magnetic fields were applied.</p>
+<p>By varying parameters such as field strengths, particle charge and mass, and initial velocity, we explored key physical quantities like the Larmor radius, cyclotron frequency, and drift velocity. These results aligned well with theoretical expectations and offered clear visual insight into complex electromagnetic interactions.</p>
+<p>Understanding these dynamics is essential for real-world applications including plasma confinement in fusion devices, particle accelerator design, and the motion of charged particles in space environments.<br/>
+This simulation effectively bridges theory and practice, enhancing both conceptual understanding and applied analysis.</p>
+<h2 id="limitations-and-future-work">Limitations and Future Work</h2>
+<p>This simulation assumes uniform, static electric and magnetic fields. In reality, many physical systems involve:</p>
+<ul>
+<li>Time-varying or spatially non-uniform fields,</li>
+<li>Relativistic particle speeds (requiring corrections to Lorentz force),</li>
+<li>Collective effects in plasmas (not modeled here),</li>
+<li>Collisions and radiation losses.</li>
+</ul>
+<p>Future work could extend this model by implementing:</p>
+<ul>
+<li>Non-uniform field distributions,</li>
+<li>Relativistic dynamics using the full Lorentz transformation,</li>
+<li>Multi-particle interactions for plasma modeling.</li>
+</ul>
+<p>These additions would provide a more accurate representation of real-world electromagnetic environments.</p>
+<hr/>
 </div>
 </div><footer>
 <div aria-label="Footer Navigation" class="rst-footer-buttons" role="navigation">

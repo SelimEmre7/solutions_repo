@@ -172,6 +172,494 @@
 <div class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
 <div class="section" itemprop="articleBody">
 <h1 id="problem-1">Problem 1</h1>
+<h1 id="equivalent-resistance-calculation-using-graph-theory">Equivalent Resistance Calculation Using Graph Theory</h1>
+<h2 id="introduction">Introduction</h2>
+<p>Electrical circuits form the backbone of virtually all modern technological systems, from handheld devices and home appliances to industrial machinery and aerospace control systems. One of the most crucial concepts in analyzing such circuits is understanding how current flows and how much resistance it encounters. The <strong>equivalent resistance</strong> between two points in a circuit determines the current response, energy dissipation, and, ultimately, the circuit’s efficiency.</p>
+<p>In introductory physics and engineering courses, this concept is taught through the straightforward application of series and parallel resistance rules. However, such simplifications quickly become inadequate when faced with real-world applications, which often include thousands or millions of elements. Examples include:</p>
+<ul>
+<li>Printed Circuit Boards (PCBs) with dense interconnects</li>
+<li>Integrated Circuits (ICs) in microprocessors</li>
+<li>Electrical grids with redundant pathways</li>
+<li>Neural networks modeled with electrical analogs</li>
+</ul>
+<p>In these complex settings, a scalable, algorithmic, and mathematically rigorous approach becomes essential. <strong>Graph theory</strong>, a field of discrete mathematics, offers a highly effective framework for addressing this challenge. By abstracting a circuit as a <strong>weighted undirected graph</strong>, where nodes represent junctions and edges represent resistors, we open the door to a broad array of mathematical tools for simplification, analysis, and simulation.</p>
+<hr/>
+<h2 id="motivation">Motivation</h2>
+<p>As electrical systems become more interconnected, dynamic, and miniaturized, traditional analysis methods face several critical limitations:</p>
+<ul>
+<li><strong>Scalability Issues</strong>: Manual methods are not viable for large systems with complex topologies.</li>
+<li><strong>Automation Barriers</strong>: Human-in-the-loop analysis is not compatible with real-time or high-frequency systems.</li>
+<li><strong>Lack of Generality</strong>: Series-parallel methods assume identifiable patterns that may not exist in real networks.</li>
+</ul>
+<p>Graph theory resolves these issues by offering:</p>
+<ol>
+<li><strong>Abstraction</strong>: Focus on topology instead of physical layout.</li>
+<li><strong>Formalism</strong>: Reduction steps are based on strict mathematical rules.</li>
+<li><strong>Reusability</strong>: Algorithms can be applied to a wide range of electrical and non-electrical networks.</li>
+<li><strong>Integration</strong>: Graph-based models work seamlessly with symbolic solvers and numerical methods.</li>
+</ol>
+<p>This makes graph-based resistance analysis invaluable for:</p>
+<ul>
+<li>Circuit design automation</li>
+<li>System verification and testing</li>
+<li>Educational simulation environments</li>
+<li>Networked sensors and embedded systems</li>
+</ul>
+<hr/>
+<h2 id="fundamental-concepts">Fundamental Concepts</h2>
+<h3 id="ohms-law">Ohm’s Law</h3>
+<p>The behavior of resistors is governed by Ohm’s Law:
+<span class="arithmatex">\(V = I \cdot R\)</span>
+Where:</p>
+<ul>
+<li><span class="arithmatex">\(V\)</span>: Voltage across the resistor</li>
+<li><span class="arithmatex">\(I\)</span>: Current through the resistor</li>
+<li><span class="arithmatex">\(R\)</span>: Resistance in ohms (Ω)</li>
+</ul>
+<p>This simple relation allows us to derive the behavior of combinations of resistors.</p>
+<h3 id="series-connection">Series Connection</h3>
+<p>In a series configuration, resistors share the same current and are connected end-to-end. The total resistance is the sum of individual resistances:
+<span class="arithmatex">\(R_{eq} = R_1 + R_2 + \cdots + R_n\)</span></p>
+<p>Graph representation: A degree-2 node connecting two resistors not part of the source/sink terminals can be removed and replaced by a single edge with combined resistance.</p>
+<h3 id="parallel-connection">Parallel Connection</h3>
+<p>In a parallel configuration, resistors share the same voltage. The total conductance is the sum of individual conductances:
+<span class="arithmatex">\(\frac{1}{R_{eq}} = \frac{1}{R_1} + \frac{1}{R_2} + \cdots + \frac{1}{R_n}\)</span></p>
+<p>In graph terms: Multiple edges between two nodes are collapsed into a single equivalent edge.</p>
+<hr/>
+<h2 id="graph-representation">Graph Representation</h2>
+<h3 id="from-circuit-to-graph">From Circuit to Graph</h3>
+<ol>
+<li><strong>Nodes (Vertices)</strong>: Each electrical junction becomes a graph node.</li>
+<li><strong>Edges</strong>: Each resistor becomes a weighted edge between two nodes.</li>
+<li><strong>Edge Weights</strong>: Represent resistance values in ohms.</li>
+</ol>
+<h3 id="example">Example:</h3>
+<p>Given:</p>
+<ul>
+<li>A—5Ω—B—10Ω—C</li>
+<li>A—15Ω—C</li>
+</ul>
+<p>Graph representation:</p>
+<ul>
+<li>Nodes: A, B, C</li>
+<li>Edges: A-B (5), B-C (10), A-C (15)</li>
+</ul>
+<p>This structure can be reduced through graph simplification.</p>
+<hr/>
+<h2 id="topological-insights-from-graph-structures">Topological Insights from Graph Structures</h2>
+<p>Understanding how each node connects within a circuit graph can reveal valuable simplification opportunities. For instance, nodes with degree two are candidates for series reduction, while high-degree nodes indicate central junctions that may support parallel pathways or more complex reductions.</p>
+<p>The diagram below visualizes a resistor network where node sizes represent their degree (number of connections). This structural perspective supports algorithmic decisions in circuit simplification.</p>
+<details>
+<summary><strong>Show Python Code</strong></summary>
+<pre><code>import matplotlib.pyplot as plt
+import networkx as nx
+
+# Create a graph with varying node degrees
+G = nx.Graph()
+G.add_edges_from([
+    ('A', 'B', {'weight': 2}),
+    ('B', 'C', {'weight': 3}),
+    ('A', 'C', {'weight': 5}),
+    ('C', 'D', {'weight': 4}),
+    ('D', 'E', {'weight': 1})
+])
+
+# Generate positions for nodes
+pos = nx.spring_layout(G, seed=42)
+
+# Compute node degrees
+degrees = dict(G.degree())
+
+# Draw the graph with node size based on degree
+fig, ax = plt.subplots(figsize=(6, 4))
+nx.draw(G, pos, with_labels=True, 
+        node_size=[v * 800 for v in degrees.values()],
+        node_color='orange', font_size=12, ax=ax)
+
+# Add resistance values as edge labels
+edge_labels = nx.get_edge_attributes(G, 'weight')
+nx.draw_networkx_edge_labels(G, pos, 
+        edge_labels={(u, v): f"{d}Ω" for (u, v), d in edge_labels.items()}, ax=ax)
+
+ax.set_title("Graph View with Node Degrees")
+ax.axis('off')
+plt.tight_layout()
+plt.show()
+</code></pre>
+</details>
+<p><img alt="alt text" src="../image-4.png"/>
+<strong>Figure:</strong> Graph view where node size reflects connection degree.</p>
+<h2 id="reduction-techniques">Reduction Techniques</h2>
+<h3 id="series-reduction">Series Reduction</h3>
+<ol>
+<li>Identify nodes with exactly two neighbors (degree 2), not including the source/sink.</li>
+<li>Merge edges: <span class="arithmatex">\(R = R_1 + R_2\)</span></li>
+<li>Replace with a direct connection between the two neighbors.</li>
+</ol>
+<h3 id="parallel-reduction">Parallel Reduction</h3>
+<ol>
+<li>Detect multiple edges between the same two nodes.</li>
+<li>Calculate: <span class="arithmatex">\(R_{eq} = (1/R_1 + 1/R_2 + \ldots)^{-1}\)</span></li>
+<li>Replace all edges with a single edge of resistance <span class="arithmatex">\(R_{eq}\)</span>.</li>
+</ol>
+<h3 id="mixed-and-nested-structures">Mixed and Nested Structures</h3>
+<p>Apply series/parallel rules recursively from the innermost elements outward. Maintain an updated graph structure throughout.</p>
+<hr/>
+<h2 id="complex-topologies-bridge-circuits">Complex Topologies: Bridge Circuits</h2>
+<p>While series and parallel reductions are effective for many simple circuits, some topologies — like the classic Wheatstone bridge — cannot be simplified using these rules alone. In such cases, graph theory and matrix-based methods are required to accurately compute the equivalent resistance.</p>
+<p>Bridge circuits typically contain a "diagonal" resistor connecting two non-adjacent nodes, forming a mesh that prevents clean separation into series or parallel components.</p>
+<p>Below is an example of such a topology:</p>
+<details>
+<summary><strong>Show Python Code</strong></summary>
+<pre><code>import matplotlib.pyplot as plt
+import networkx as nx
+
+# Create a Wheatstone Bridge circuit using a graph
+G = nx.Graph()
+
+# Add resistors (edges) between nodes with weights as resistance values
+G.add_edge('A', 'B', weight=100)
+G.add_edge('B', 'C', weight=100)
+G.add_edge('A', 'D', weight=100)
+G.add_edge('D', 'C', weight=100)
+G.add_edge('B', 'D', weight=50)  # bridge resistor
+
+# Define positions for a clear layout
+pos = {'A': (0, 1), 'B': (2, 2), 'C': (4, 1), 'D': (2, 0)}
+
+# Draw the graph
+fig, ax = plt.subplots(figsize=(6, 4))
+nx.draw(G, pos, with_labels=True, node_color='lightblue', node_size=1600,
+        font_size=14, font_weight='bold', ax=ax)
+
+# Add edge labels (resistance values)
+edge_labels = nx.get_edge_attributes(G, 'weight')
+nx.draw_networkx_edge_labels(G, pos, edge_labels={(u, v): f"{w}Ω" for (u, v), w in edge_labels.items()}, ax=ax)
+
+# Set title and hide axes
+ax.set_title("Bridge Circuit Example (Wheatstone Bridge)", fontsize=14)
+ax.axis('off')
+plt.tight_layout()
+plt.show()
+</code></pre>
+</details>
+<p><img alt="alt text" src="../image-3.png"/>
+<strong>Figure:</strong> Wheatstone bridge circuit with a diagonal resistor between nodes B and D.</p>
+<h2 id="laplacian-matrix-and-algebraic-analysis">Laplacian Matrix and Algebraic Analysis</h2>
+<p>The <strong>Laplacian matrix</strong> <span class="arithmatex">\(L\)</span> of a graph is central to matrix-based resistance calculations.</p>
+<h3 id="construction">Construction:</h3>
+<p><span class="arithmatex">\(L = D - A\)</span></p>
+<ul>
+<li><span class="arithmatex">\(D\)</span>: Degree matrix (diagonal matrix of node degrees)</li>
+<li><span class="arithmatex">\(A\)</span>: Adjacency matrix (weighted by conductance)</li>
+</ul>
+<h3 id="effective-resistance-formula">Effective Resistance Formula:</h3>
+<p>Let <span class="arithmatex">\(L^+\)</span> be the pseudoinverse of <span class="arithmatex">\(L\)</span>, then the effective resistance between nodes <span class="arithmatex">\(i\)</span> and <span class="arithmatex">\(j\)</span> is:
+<span class="arithmatex">\(R_{ij} = (e_i - e_j)^T L^+ (e_i - e_j)\)</span></p>
+<p>This method can be applied to any connected graph and supports symbolic, numeric, and probabilistic interpretations.</p>
+<hr/>
+<h2 id="algorithm-design">Algorithm Design</h2>
+<p><strong>Inputs:</strong></p>
+<ul>
+<li>A weighted graph <strong>G</strong></li>
+<li>Terminal nodes <strong>A</strong> and <strong>B</strong></li>
+</ul>
+<p><strong>Purpose:</strong>
+This algorithm systematically reduces a resistor network using graph-based simplification rules. It is particularly useful for automating resistance calculations in complex or irregular circuit topologies where manual series-parallel identification is impractical.</p>
+<p><strong>Process:</strong></p>
+<ol>
+<li>Check if the graph is connected.</li>
+<li>
+<p>While |V| &gt; 2:</p>
+</li>
+<li>
+<p>Apply <strong>series reductions</strong></p>
+</li>
+<li>Apply <strong>parallel reductions</strong></li>
+<li>Return the edge weight between nodes <strong>A</strong> and <strong>B</strong></li>
+</ol>
+<p><strong>Notes:</strong></p>
+<ul>
+<li>Use priority queues to select optimal reduction paths.</li>
+<li>Mark visited nodes to avoid redundant processing.</li>
+</ul>
+<hr/>
+<h3 id="pseudocode-graph-based-resistance-simplification">Pseudocode: Graph-Based Resistance Simplification</h3>
+<p>The following pseudocode demonstrates how series and parallel rules can be applied iteratively to simplify the graph:</p>
+<pre><code>Function CalculateEquivalentResistance(Graph G, Node A, Node B):
+
+    While the graph has more than two nodes:
+
+        # --- Series Reduction ---
+        For each node N in G:
+            If degree(N) == 2 and N is not A or B:
+                Let neighbors be U and V
+                Let R1 = resistance(N to U)
+                Let R2 = resistance(N to V)
+                R_eq = R1 + R2
+                Remove node N
+                Add edge between U and V with resistance R_eq
+
+        # --- Parallel Reduction ---
+        For each pair of nodes (U, V):
+            If multiple edges exist between U and V:
+                Let R1, R2, ..., Rn be all resistances between U and V
+                R_eq = 1 / (1/R1 + 1/R2 + ... + 1/Rn)
+                Remove all edges between U and V
+                Add one edge between U and V with resistance R_eq
+
+    Return resistance between Node A and Node B
+</code></pre>
+<hr/>
+<h2 id="detailed-examples">Detailed Examples</h2>
+<h3 id="example-1-linear-chain">Example 1: Linear Chain</h3>
+<p>A --[2Ω]-- B --[3Ω]-- C → Result: 5Ω between A and C</p>
+<details>
+<summary><strong>Show Python Code</strong></summary>
+<pre><code>import matplotlib.pyplot as plt
+import networkx as nx
+
+# Create the linear chain circuit: A - 2Ω - B - 3Ω - C
+G = nx.Graph()
+G.add_edge('A', 'B', weight=2)
+G.add_edge('B', 'C', weight=3)
+
+# Position nodes in a straight line
+pos = {'A': (0, 0), 'B': (1, 0), 'C': (2, 0)}
+labels = nx.get_edge_attributes(G, 'weight')
+
+# Plot the graph
+plt.figure(figsize=(6, 2.5))
+nx.draw(G, pos, with_labels=True, node_color='lightblue',
+        node_size=1600, font_size=14, font_weight='bold')
+nx.draw_networkx_edge_labels(
+    G, pos, edge_labels={(u, v): f"{w}Ω" for (u, v), w in labels.items()}
+)
+plt.title("Linear Chain: A - 2Ω - B - 3Ω - C")
+plt.axis('off')
+plt.tight_layout()
+plt.show()
+</code></pre>
+</details>
+<p><img alt="alt text" src="../image-1.png"/></p>
+<p><strong>This figure</strong> shows a simple series connection of two resistors: 2Ω between A–B and 3Ω between B–C. The equivalent resistance between A and C is 5Ω.</p>
+<h3 id="example-2-two-parallel-resistors">Example 2: Two Parallel Resistors</h3>
+<p>A --[4Ω]-- B and A --[12Ω]-- B → Result:
+<span class="arithmatex">\(R = \left( \frac{1}{4} + \frac{1}{12} \right)^{-1} = 3Ω\)</span></p>
+<details>
+<summary><strong>Show Python Code</strong></summary>
+<pre><code>import matplotlib.pyplot as plt
+
+# Set up the figure size
+fig, ax = plt.subplots(figsize=(6, 4))
+
+# Define node positions
+positions = {
+    'A': (0, 1),
+    'B': (4, 1),
+    'mid_top': (2, 2),
+    'mid_bottom': (2, 0)
+}
+
+# Draw terminal nodes A and B
+ax.scatter(*positions['A'], s=1600, color='lightblue')
+ax.text(*positions['A'], 'A', fontsize=14, fontweight='bold', ha='center', va='center')
+
+ax.scatter(*positions['B'], s=1600, color='lightblue')
+ax.text(*positions['B'], 'B', fontsize=14, fontweight='bold', ha='center', va='center')
+
+# Draw the top path with 4Ω resistor
+ax.plot([positions['A'][0], positions['mid_top'][0], positions['B'][0]],
+        [positions['A'][1], positions['mid_top'][1], positions['B'][1]],
+        color='blue')
+ax.text(2, 2.1, '4Ω', fontsize=12, ha='center', color='blue')
+
+# Draw the bottom path with 12Ω resistor
+ax.plot([positions['A'][0], positions['mid_bottom'][0], positions['B'][0]],
+        [positions['A'][1], positions['mid_bottom'][1], positions['B'][1]],
+        color='green')
+ax.text(2, -0.3, '12Ω', fontsize=12, ha='center', color='green')
+
+# Title and axis settings
+ax.set_title("Parallel Resistors: A-B (4Ω and 12Ω)", fontsize=14)
+ax.set_xlim(-1, 5)
+ax.set_ylim(-1, 3)
+ax.axis('off')
+
+plt.tight_layout()
+plt.show()
+</code></pre>
+</details>
+<p><img alt="alt text" src="../image-2.png"/>
+<strong>Figure:</strong> Parallel resistors between nodes A and B (4Ω and 12Ω).</p>
+<h3 id="example-3-combination">Example 3: Combination</h3>
+<ul>
+<li>A-B: 3Ω</li>
+<li>B-C: 6Ω</li>
+<li>A-C: 2Ω</li>
+</ul>
+<p>A-B-C = 9Ω; A-C = 2Ω → parallel →
+<span class="arithmatex">\(R = \left( \frac{1}{9} + \frac{1}{2} \right)^{-1} = 1.57Ω\)</span></p>
+<details>
+<summary><strong>Show Python Code</strong></summary>
+<pre><code>import matplotlib.pyplot as plt
+import networkx as nx
+
+# Create a mixed series-parallel configuration: A-B-C (series) and A-C (parallel)
+G = nx.Graph()
+G.add_edge('A', 'B', weight=3)
+G.add_edge('B', 'C', weight=6)
+G.add_edge('A', 'C', weight=2)
+
+# Position the nodes in a triangular layout
+pos = {'A': (0, 0), 'B': (1, 1.5), 'C': (2, 0)}
+labels = nx.get_edge_attributes(G, 'weight')
+
+# Plot the graph
+plt.figure(figsize=(6, 4))
+nx.draw(G, pos, with_labels=True, node_color='orange', node_size=1600, font_size=14, font_weight='bold')
+nx.draw_networkx_edge_labels(G, pos, edge_labels={(u, v): f"{d}Ω" for (u, v), d in labels.items()})
+plt.title("Mixed Configuration: A-B-C (series) and A-C (parallel)")
+plt.axis('off')
+plt.tight_layout()
+plt.show()
+</code></pre>
+</details>
+<p><img alt="alt text" src="../image.png"/>
+<strong>This figure</strong> illustrates a mixed resistor network where resistors between nodes A and B (3Ω) and between B and C (6Ω) are connected in series. Additionally, a 2Ω resistor directly connects A and C in parallel with the series path. The diagram represents a typical example of series-parallel simplification used to compute the equivalent resistance between A and C.</p>
+<h3 id="example-4-progressive-reduction-steps">Example 4: Progressive Reduction Steps</h3>
+<p>In more complex circuits, a combination of series and parallel resistors must be reduced gradually in steps. This example demonstrates how a circuit with both series and parallel elements is simplified in three phases.</p>
+<p>At each step, series or parallel rules are applied until a single equivalent resistance remains.</p>
+<details>
+<summary><strong>Show Python Code</strong></summary>
+<pre><code>import matplotlib.pyplot as plt
+import networkx as nx
+from PIL import Image
+import io
+from IPython.display import display
+
+# Function to draw a single reduction step and return as PIL image
+def draw_step(G, step_num):
+    pos = nx.spring_layout(G, seed=42)
+    labels = nx.get_edge_attributes(G, 'weight')
+    fig, ax = plt.subplots(figsize=(4, 3))
+    nx.draw(G, pos, with_labels=True, node_color='lightgreen', node_size=1500, ax=ax)
+    nx.draw_networkx_edge_labels(G, pos, edge_labels={(u, v): f"{w:.2f}Ω" for (u, v), w in labels.items()}, ax=ax)
+    ax.set_title(f"Reduction Step {step_num}")
+    ax.axis('off')
+    plt.tight_layout()
+
+    buf = io.BytesIO()
+    plt.savefig(buf, format='png', dpi=300)
+    plt.close()
+    buf.seek(0)
+    return Image.open(buf)
+
+# Step 1: Original mixed circuit
+G1 = nx.Graph()
+G1.add_edge('A', 'B', weight=2)
+G1.add_edge('B', 'C', weight=3)
+G1.add_edge('A', 'C', weight=6)
+img1 = draw_step(G1, 1)
+
+# Step 2: Combine A–B–C series path (2+3=5) in parallel with A–C (6Ω)
+G2 = nx.Graph()
+G2.add_edge('A', 'C', weight=1 / (1/5 + 1/6))  # ≈ 2.73Ω
+img2 = draw_step(G2, 2)
+
+# Step 3: Final equivalent resistance
+G3 = nx.Graph()
+G3.add_edge('A', 'C', weight=2.73)
+img3 = draw_step(G3, 3)
+
+# Combine images horizontally
+h = max(img1.height, img2.height, img3.height)
+img1 = img1.resize((img1.width, h))
+img2 = img2.resize((img2.width, h))
+img3 = img3.resize((img3.width, h))
+
+total_width = img1.width + img2.width + img3.width
+combined = Image.new("RGB", (total_width, h))
+combined.paste(img1, (0, 0))
+combined.paste(img2, (img1.width, 0))
+combined.paste(img3, (img1.width + img2.width, 0))
+
+# Display in Colab
+display(combined)
+</code></pre>
+</details>
+<p><img alt="alt text" src="../image-5.png"/>
+<strong>Figure:</strong> Step-by-step simplification of a mixed resistor network.<br/>
+The original circuit includes a series path (A–B–C) and a parallel connection (A–C).<br/>
+In Step 1, the full configuration is shown.<br/>
+In Step 2, the series path is combined into a single resistor.<br/>
+Finally, in Step 3, the equivalent resistance is calculated using parallel reduction, resulting in approximately 2.73Ω between nodes A and C.</p>
+<hr/>
+<h2 id="matrix-based-resistance-analysis">Matrix-Based Resistance Analysis</h2>
+<p>In addition to topological reductions such as series and parallel simplifications, graph theory supports a matrix-based approach for calculating equivalent resistance. This method is especially powerful in complex or non-reducible circuits.</p>
+<p>The Laplacian matrix of a graph encodes how nodes are connected and how strongly (via edge weights, or conductance). It is defined as:</p>
+<div class="arithmatex">\[
+L = D - A
+\]</div>
+<p><strong>Where:</strong></p>
+<ul>
+<li><span class="arithmatex">\( D \)</span>: Degree matrix (a diagonal matrix representing the number of edges connected to each node)</li>
+<li><span class="arithmatex">\( A \)</span>: Adjacency matrix (weighted by conductance values between nodes)</li>
+</ul>
+<p>Using the <strong>Moore–Penrose pseudoinverse</strong> of the Laplacian matrix, denoted <span class="arithmatex">\( L^{+} \)</span>, the <strong>effective resistance</strong> between two nodes <span class="arithmatex">\( i \)</span> and <span class="arithmatex">\( j \)</span> is given by:</p>
+<div class="arithmatex">\[
+R_{ij} = (e_i - e_j)^T \cdot L^{+} \cdot (e_i - e_j)
+\]</div>
+<p>The heatmap below visualizes the Laplacian matrix of a simple connected graph:</p>
+<details>
+<summary><strong>Show Python Code</strong></summary>
+<pre><code>import matplotlib.pyplot as plt
+import networkx as nx
+import seaborn as sns
+
+# Create a simple connected graph
+G = nx.Graph()
+G.add_edges_from([
+    ('A', 'B'),
+    ('B', 'C'),
+    ('C', 'D'),
+    ('D', 'A'),
+    ('A', 'C')
+])
+
+# Compute the Laplacian matrix
+L = nx.laplacian_matrix(G).toarray()
+
+# Plot the heatmap
+fig, ax = plt.subplots(figsize=(5, 4))
+sns.heatmap(L, annot=True, fmt="d", cmap="YlGnBu", xticklabels=G.nodes(), yticklabels=G.nodes(), ax=ax)
+ax.set_title("Laplacian Matrix Heatmap")
+plt.tight_layout()
+plt.show()
+</code></pre>
+</details>
+<p><img alt="alt text" src="../image-6.png"/></p>
+<h2 id="figure-heatmap-of-the-laplacian-matrix-for-a-4-node-resistor-network"><strong>Figure:</strong> Heatmap of the Laplacian matrix for a 4-node resistor network.</h2>
+<h2 id="extensions">Extensions</h2>
+<ul>
+<li><strong>AC Analysis</strong>: Replace resistance <span class="arithmatex">\(R\)</span> with impedance <span class="arithmatex">\(Z = R + j\omega L - \frac{1}{j\omega C}\)</span></li>
+<li><strong>Nonlinear Networks</strong>: Include temperature- or voltage-dependent resistances</li>
+<li><strong>Stochastic Models</strong>: Handle resistors with probabilistic failure rates</li>
+</ul>
+<hr/>
+<h2 id="real-world-applications">Real-World Applications</h2>
+<ul>
+<li>PCB trace optimization</li>
+<li>Fault-tolerant routing in microchips</li>
+<li>Resistance-based sensor calibration</li>
+<li>Analysis of resistive touchscreen matrices</li>
+<li>Energy distribution in smart grids</li>
+</ul>
+<hr/>
+<h2 id="conclusion">Conclusion</h2>
+<p>Graph theory provides a powerful, formal, and scalable approach to calculating equivalent resistance. Whether the system consists of a few resistors or a mesh of thousands of nodes, graph-based algorithms and matrix methods enable precise and efficient analysis. As electronics become more complex and interconnected, the integration of graph theory into the toolkit of engineers and scientists becomes not only useful but essential.</p>
+<p>Compared to traditional techniques like mesh analysis or nodal analysis—which often require solving large systems of equations—graph-based simplification offers a visual and algorithmic approach that can be automated. However, it may be less effective when dealing with dynamic components (e.g., capacitors, inductors) or circuits with non-linear behaviors.</p>
+<p>Future directions include AI-assisted graph simplification, integration with symbolic algebra for real-time prototyping, and quantum analogues for resistance in quantum networks.</p>
 </div>
 </div><footer>
 <div aria-label="Footer Navigation" class="rst-footer-buttons" role="navigation">

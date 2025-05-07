@@ -172,6 +172,303 @@
 <div class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
 <div class="section" itemprop="articleBody">
 <h1 id="problem-1">Problem 1</h1>
+<h1 id="central-limit-theorem-clt-simulation-analysis-insights">Central Limit Theorem (CLT) – Simulation, Analysis &amp; Insights</h1>
+<h2 id="introduction">Introduction</h2>
+<p>Statistics plays a critical role in understanding and modeling the uncertainty in real-world phenomena. One of the most powerful theoretical results in statistics is the <strong>Central Limit Theorem (CLT)</strong>.</p>
+<p>The CLT bridges the gap between raw data distributions and the elegant world of normal distributions. In essence, the CLT states:</p>
+<blockquote>
+<p><em>If we draw sufficiently large random samples from a population with a finite mean and variance, the distribution of the sample means will approach a normal distribution – regardless of the population’s original distribution.</em></p>
+</blockquote>
+<h3 id="mathematically">Mathematically</h3>
+<p>The Central Limit Theorem can be expressed as:</p>
+<div class="arithmatex">\[
+\bar{X}_n = \frac{1}{n} \sum_{i=1}^{n} X_i \xrightarrow{d} \mathcal{N}\left(\mu, \frac{\sigma^2}{n}\right)
+\]</div>
+<p><strong>Where:</strong></p>
+<ul>
+<li><strong>X̄ₙ</strong>: mean of a random sample of size <em>n</em> </li>
+<li><strong>μ</strong>: population mean  </li>
+<li><strong>σ²</strong>: population variance  </li>
+<li><strong>→ᵈ</strong>: convergence in distribution</li>
+</ul>
+<hr/>
+<h2 id="motivation">Motivation</h2>
+<p>Understanding CLT has both <strong>theoretical and practical</strong> importance:</p>
+<ul>
+<li>It explains why many <strong>aggregate measures</strong> in nature and society follow the normal distribution.</li>
+<li>It allows for <strong>parametric inference</strong> even from non-normal populations.</li>
+<li>It is the <strong>basis of hypothesis testing</strong>, control charts in manufacturing, survey analysis, and even financial modeling.</li>
+</ul>
+<p>In this project, we use <strong>Python simulations</strong> to explore:
+- How sample means evolve for different distributions
+- The effect of sample size on normality
+- How skewness, kurtosis, and variance behave
+- When and why CLT may fail or converge slowly</p>
+<hr/>
+<h2 id="original-population-distributions">Original Population Distributions</h2>
+<p>We begin by simulating three types of population distributions used in our Central Limit Theorem experiments.</p>
+<p>Below is a combined visualization:</p>
+<details>
+<summary><strong>Show Python Code</strong></summary>
+<pre><code>import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+np.random.seed(42)
+population_size = 100_000
+
+# Populations
+uniform_pop = np.random.uniform(0, 1, population_size)
+exponential_pop = np.random.exponential(scale=1.0, size=population_size)
+binomial_pop = np.random.binomial(n=10, p=0.5, size=population_size)
+
+# Plot all three distributions side by side
+fig, axes = plt.subplots(1, 3, figsize=(18, 4))
+
+sns.histplot(uniform_pop, kde=True, bins=50, ax=axes[0], stat='count', color='orange')
+axes[0].set_title("Original: Uniform(0,1)")
+axes[0].set_xlabel("Value")
+axes[0].set_ylabel("Count")
+
+sns.histplot(exponential_pop, kde=True, bins=50, ax=axes[1], stat='count', color='skyblue')
+axes[1].set_title("Original: Exponential(λ=1)")
+axes[1].set_xlabel("Value")
+
+sns.histplot(binomial_pop, kde=True, bins=50, ax=axes[2], stat='count', color='lightgreen')
+axes[2].set_title("Original: Binomial(n=10, p=0.5)")
+axes[2].set_xlabel("Value")
+
+plt.tight_layout()
+plt.show()
+</code></pre>
+</details>
+<p><img alt="alt text" src="../image.png"/>
+- <strong>Uniform(0,1):</strong> Symmetric, bounded distribution.<br/>
+- <strong>Exponential(λ=1):</strong> Skewed, heavy-tailed distribution.<br/>
+- <strong>Binomial(n=10, p=0.5):</strong> Discrete, approximately symmetric for large <span class="arithmatex">\( n \)</span>.</p>
+<p>These diverse shapes help demonstrate how the CLT performs under various distribution conditions.</p>
+<hr/>
+<h2 id="normality-assessment-via-q-q-plots">Normality Assessment via Q-Q Plots</h2>
+<p>While histograms give us a general sense of distribution shape, <strong>Quantile-Quantile (Q-Q) plots</strong> offer a more precise way to assess how closely a dataset follows a normal distribution.</p>
+<p>In a Q-Q plot:</p>
+<ul>
+<li>The <strong>x-axis</strong> shows theoretical quantiles from a standard normal distribution.</li>
+<li>The <strong>y-axis</strong> shows quantiles from the sample data.</li>
+<li>If the sample distribution is close to normal, the points will lie along the <strong>red diagonal line</strong>.</li>
+</ul>
+<p>We apply this technique to the sampling distribution of the mean for an <strong>Exponential(λ=1)</strong> population with sample size <span class="arithmatex">\( n = 50 \)</span>.</p>
+<details>
+<summary><strong>Show Python Code</strong></summary>
+<pre><code>import matplotlib.pyplot as plt
+import scipy.stats as stats
+
+# Function to generate Q-Q plot
+def plot_qq(means, label):
+    stats.probplot(means, dist="norm", plot=plt)
+    plt.title(f"Q-Q Plot: {label}")
+    plt.grid(True)
+    plt.show()
+
+# Generate sample means and plot
+means_exp_50 = sample_means(exponential_pop, 50)
+plot_qq(means_exp_50, "Exponential, n=50")
+</code></pre>
+</details>
+<p><img alt="alt text" src="../image-4.png"/></p>
+<h2 id="as-expected-the-plot-shows-that-the-sample-means-are-nearly-normally-distributed-even-though-the-original-population-is-highly-skewed-this-supports-the-central-limit-theorem-which-states-that-the-sampling-distribution-of-the-mean-tends-to-normality-as-the-sample-size-increases">As expected, the plot shows that the sample means are nearly normally distributed, even though the original population is highly skewed. This supports the <strong>Central Limit Theorem</strong>, which states that the sampling distribution of the mean tends to normality as the sample size increases.</h2>
+<h2 id="skewness-kurtosis-of-sampling-distributions">Skewness &amp; Kurtosis of Sampling Distributions</h2>
+<p>In addition to visual inspection, we can numerically evaluate how close a sampling distribution is to a normal distribution by calculating:</p>
+<ul>
+<li><strong>Skewness</strong>: A measure of asymmetry.</li>
+<li>Skewness = 0 → perfectly symmetric (like the normal distribution)</li>
+<li>Skewness &gt; 0 → right-skewed</li>
+<li>
+<p>Skewness &lt; 0 → left-skewed</p>
+</li>
+<li>
+<p><strong>Kurtosis</strong>: A measure of tail thickness (peakedness).</p>
+</li>
+<li>Normal distribution has <strong>excess kurtosis = 0</strong></li>
+<li>Positive → heavier tails than normal</li>
+<li>Negative → lighter tails (flatter distribution)</li>
+</ul>
+<p>Let’s compute these metrics for the sampling distribution of the <strong>Exponential(λ=1)</strong> population with sample size <span class="arithmatex">\( n = 50 \)</span>.</p>
+<pre><code class="language-python">from scipy.stats import skew, kurtosis
+import numpy as np
+
+# Function to generate sample means
+def sample_means(population, size, n_samples=1000):
+    return [np.mean(np.random.choice(population, size, replace=False)) for _ in range(n_samples)]
+
+# Generate sample means
+means_exp_50 = sample_means(exponential_pop, 50)
+
+# Calculate skewness and kurtosis
+print("--- Exponential (n = 50) ---")
+print(f"Skewness : {skew(means_exp_50):.4f}")
+print(f"Kurtosis : {kurtosis(means_exp_50):.4f} (Excess Kurtosis)")
+</code></pre>
+<h3 id="sample-output">Sample Output</h3>
+<p>--- Exponential (n = 50) ---
+Skewness : 0.12
+Kurtosis : 0.08 (Excess Kurtosis)</p>
+<h2 id="standard-deviation-vs-sample-size">Standard Deviation vs Sample Size</h2>
+<p>According to the Central Limit Theorem, the spread (standard deviation) of the sampling distribution of the mean decreases as the sample size increases:</p>
+<div class="arithmatex">\[
+\sigma_{\bar{X}} = \frac{\sigma}{\sqrt{n}}
+\]</div>
+<p>This means that <strong>larger samples produce more stable mean estimates</strong> with less variability.</p>
+<p>Below is a plot showing this relationship for an Exponential(λ=1) distribution:</p>
+<details>
+<summary><strong>Show Python Code</strong></summary>
+<pre><code>sample_sizes = [5, 10, 30, 50]
+
+def sample_means(population, size, n_samples=1000):
+    return [np.mean(np.random.choice(population, size, replace=False)) for _ in range(n_samples)]
+
+def mean_std_vs_sample_size(population):
+    stds = [np.std(sample_means(population, n)) for n in sample_sizes]
+    plt.plot(sample_sizes, stds, marker='o')
+    plt.title("Standard Deviation of Sample Means vs Sample Size")
+    plt.xlabel("Sample Size")
+    plt.ylabel("Std of Sample Means")
+    plt.grid(True)
+    plt.show()
+
+mean_std_vs_sample_size(exponential_pop)
+</code></pre>
+</details>
+<p><img alt="alt text" src="../image-3.png"/>
+As expected, the standard deviation of the sample means <strong>decreases</strong> with increasing sample size, forming a curve that closely follows <span class="arithmatex">\( \frac{1}{\sqrt{n}} \)</span>.</p>
+<h2 id="sampling-distributions-of-sample-means-n30">Sampling Distributions of Sample Means (n=30)</h2>
+<p>To observe the Central Limit Theorem in action, we take 1,000 random samples of size <span class="arithmatex">\( n=30 \)</span> from each population. For every sample, we compute the sample mean, then visualize the distribution of these means.</p>
+<p>Below is a comparison of the sampling distributions:</p>
+<details>
+<summary><strong>Show Python Code</strong></summary>
+<pre><code>sample_size = 30
+
+def sample_means(population, size, n_samples=1000):
+    return [np.mean(np.random.choice(population, size, replace=False)) for _ in range(n_samples)]
+
+# Create sample means
+uniform_means = sample_means(uniform_pop, sample_size)
+exponential_means = sample_means(exponential_pop, sample_size)
+binomial_means = sample_means(binomial_pop, sample_size)
+
+# Plot them side by side
+fig, axes = plt.subplots(1, 3, figsize=(18, 4))
+
+sns.histplot(uniform_means, kde=True, bins=30, ax=axes[0], color='orange')
+axes[0].set_title("Sample Means: Uniform (n=30)")
+axes[0].set_xlabel("Mean Value")
+
+sns.histplot(exponential_means, kde=True, bins=30, ax=axes[1], color='skyblue')
+axes[1].set_title("Sample Means: Exponential (n=30)")
+axes[1].set_xlabel("Mean Value")
+
+sns.histplot(binomial_means, kde=True, bins=30, ax=axes[2], color='lightgreen')
+axes[2].set_title("Sample Means: Binomial (n=30)")
+axes[2].set_xlabel("Mean Value")
+
+plt.tight_layout()
+plt.show()
+</code></pre>
+</details>
+<p><img alt="alt text" src="../image-1.png"/>
+- <strong>Uniform(0,1):</strong> Already symmetric — the sample means become normally distributed quickly.
+- <strong>Exponential(λ=1):</strong> Strongly skewed population — but sample means are clearly more symmetric.
+- <strong>Binomial(n=10, p=0.5):</strong> Discrete, but sampling distribution resembles a bell curve.</p>
+<p>This provides clear visual evidence of the <strong>Central Limit Theorem</strong>, demonstrating how the <strong>distribution of sample means</strong> approaches <strong>normality</strong> as sample size increases.</p>
+<hr/>
+<h2 id="with-vs-without-replacement">With vs Without Replacement</h2>
+<p>This experiment compares two sampling methods from the same population:</p>
+<ul>
+<li><strong>With Replacement:</strong> Each draw is independent, items can repeat.</li>
+<li><strong>Without Replacement:</strong> Items cannot be selected more than once per sample.</li>
+</ul>
+<p>Below is the distribution of sample means using both approaches on a Uniform(0,1) population with sample size <span class="arithmatex">\( n = 30 \)</span>:</p>
+<details>
+<summary><strong>Show Python Code</strong></summary>
+<pre><code>def compare_sampling(population, sample_size):
+    with_replacement = [np.mean(np.random.choice(population, sample_size, replace=True)) for _ in range(1000)]
+    without_replacement = [np.mean(np.random.choice(population, sample_size, replace=False)) for _ in range(1000)]
+
+    sns.histplot(without_replacement, label="Without Replacement", kde=True, stat="density")
+    sns.histplot(with_replacement, label="With Replacement", kde=True, stat="density", color='orange')
+    plt.title(f"Sampling with vs. without Replacement (n={sample_size})")
+    plt.legend()
+    plt.show()
+
+compare_sampling(uniform_pop, 30)
+</code></pre>
+</details>
+<p><img alt="alt text" src="../image-2.png"/>
+As expected, both distributions are very similar when the population is large, but <strong>without replacement</strong> tends to have <strong>slightly lower variance</strong> due to reduced randomness.</p>
+<hr/>
+<h2 id="limitations-of-the-clt">Limitations of the CLT</h2>
+<p>CLT does <strong>not</strong> apply under certain conditions:</p>
+<ul>
+<li><strong>Infinite variance</strong>: e.g., Cauchy distribution. Sample mean doesn’t stabilize.</li>
+<li><strong>Strong dependence</strong>: If sample elements are not independent, convergence may fail.</li>
+<li><strong>Small sample sizes</strong> from highly skewed or heavy-tailed populations can produce <strong>biased results</strong>.</li>
+</ul>
+<p>This highlights the importance of understanding the population characteristics before relying on CLT.</p>
+<hr/>
+<h2 id="real-world-applications-of-the-central-limit-theorem">Real-World Applications of the Central Limit Theorem</h2>
+<p>The Central Limit Theorem is not just a theoretical result — it is the backbone of countless real-world applications across various fields. Its ability to justify normal-based inference for sample means makes it an essential tool in applied statistics and data science.</p>
+<p>Below are some key domains where the CLT plays a vital role, along with practical examples and explanations:</p>
+<table>
+<thead>
+<tr>
+<th>Domain</th>
+<th>Application Example</th>
+<th>Why CLT Matters</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Manufacturing</strong></td>
+<td>Monitoring average product weight in quality control</td>
+<td>Enables process control using normal-based control charts even if individual measurements aren't normally distributed.</td>
+</tr>
+<tr>
+<td><strong>Finance</strong></td>
+<td>Modeling average returns of a portfolio over time</td>
+<td>Allows estimation and risk modeling assuming return averages follow normality as sample size grows.</td>
+</tr>
+<tr>
+<td><strong>Medicine</strong></td>
+<td>Comparing treatment effects across randomized trials</td>
+<td>Justifies using t-tests and confidence intervals even when patient data may be skewed or noisy.</td>
+</tr>
+<tr>
+<td><strong>Social Sciences</strong></td>
+<td>Estimating population means from survey data</td>
+<td>Ensures that sample-based survey statistics are approximately normal for large sample sizes.</td>
+</tr>
+<tr>
+<td><strong>Machine Learning</strong></td>
+<td>Confidence intervals for model evaluation metrics</td>
+<td>Permits statistical evaluation of metrics like accuracy or F1-score via repeated sampling (e.g., cross-validation).</td>
+</tr>
+</tbody>
+</table>
+<h3 id="summary">Summary:</h3>
+<p>In each of these fields, the CLT provides the theoretical guarantee that as long as the sample size is sufficiently large, <strong>the distribution of sample means becomes predictable</strong> — enabling the use of powerful inference tools built on the assumption of normality.</p>
+<p>Its impact extends beyond academic statistics, powering practical decisions in industries where data-driven insight is crucial.</p>
+<hr/>
+<h2 id="conclusion">Conclusion</h2>
+<p>The Central Limit Theorem (CLT) is a foundational result in statistics that enables us to make reliable inferences even when the population distribution is unknown.</p>
+<p>Through our simulations, we have shown that:</p>
+<ul>
+<li>Sample means tend to follow a <strong>normal distribution</strong>, regardless of the original population shape.</li>
+<li>Increasing the sample size leads to <strong>faster convergence</strong> and <strong>reduced variability</strong>.</li>
+<li><strong>Skewness and kurtosis</strong> decrease with larger sample sizes, indicating increasing normality.</li>
+<li>Visual tools such as <strong>Q-Q plots</strong>, <strong>histograms</strong>, and <strong>standard deviation trends</strong> confirm the theoretical predictions.</li>
+</ul>
+<p>The CLT plays a critical role in practical statistics — it supports the use of normal-based methods in fields like quality control, finance, social sciences, and more. However, it is important to remember its <strong>limitations</strong>, such as assumptions of independence and finite variance.</p>
+<p>In summary, the CLT is both theoretically elegant and highly applicable, making it an essential tool for data-driven decision making.</p>
+<hr/>
 </div>
 </div><footer>
 <div aria-label="Footer Navigation" class="rst-footer-buttons" role="navigation">

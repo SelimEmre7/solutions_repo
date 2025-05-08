@@ -281,6 +281,7 @@ plt.show()
 </details>
 
 ![alt text](image-1.png)
+
 **Figure above.** Log-log plot of \( T^2 \) versus \( r^3 \) using real planetary data from the Solar System. The linear trend confirms Kepler’s Third Law, where \( T^2 \propto r^3 \).
 
 ---
@@ -469,7 +470,7 @@ This animation visualizes how planets move in elliptical orbits and how Kepler's
    - Comets, with their highly elliptical orbits, often have periods that span many years or even centuries. As they approach the Sun, they accelerate due to the Sun’s gravitational pull, and as they move farther away, they slow down. The semi-major axis in the formula allows us to calculate the orbital period of comets, despite their significant distance changes from the central mass.
    - For instance, **Halley's Comet**, with an orbital period of about 76 years, follows an elliptical path. Its distance from the Sun varies dramatically from about 0.09 AU (at perihelion) to 35 AU (at aphelion), yet Kepler’s law still applies when we use the semi-major axis to describe its orbit.
    
-   ### Halley’s Comet Speed Variation Over Orbit
+ **Halley’s Comet Speed Variation Over Orbit**
 
 Below is a graph that illustrates the speed variation of Halley’s Comet as it travels along its elliptical orbit. The speed is highest near the **perihelion** (the closest point to the Sun) and lowest near the **aphelion** (the farthest point from the Sun).
 

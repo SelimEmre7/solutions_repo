@@ -418,6 +418,7 @@ plt.show()
 </details>
 
 ![alt text](image.png)
+
 **This figure** illustrates a mixed resistor network where resistors between nodes A and B (3Ω) and between B and C (6Ω) are connected in series. Additionally, a 2Ω resistor directly connects A and C in parallel with the series path. The diagram represents a typical example of series-parallel simplification used to compute the equivalent resistance between A and C.
 ### Example 4: Progressive Reduction Steps
 

@@ -127,7 +127,8 @@ plot_qq(means_exp_50, "Exponential, n=50")
 
 ![alt text](image-4.png)
 
-As expected, the plot shows that the sample means are nearly normally distributed, even though the original population is highly skewed. This supports the **Central Limit Theorem**, which states that the sampling distribution of the mean tends to normality as the sample size increases.
+<p>As expected, the plot shows that the sample means are nearly normally distributed, even though the original population is highly skewed. This supports the <strong>Central Limit Theorem</strong>, which states that the sampling distribution of the mean tends to normality as the sample size increases.</p>
+
 ---
 
 ##  Skewness & Kurtosis of Sampling Distributions

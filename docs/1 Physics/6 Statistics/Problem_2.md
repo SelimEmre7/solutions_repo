@@ -111,6 +111,7 @@ plt.show()
 </details>
 
 ![alt text](image-5.png)
+
 **Figure:** Scatter plot of random points used in estimating π via the Monte Carlo circle method.  
 Points inside the circle are shown in blue, outside in red.
 

@@ -3,7 +3,7 @@
 
 ## 1. Introduction
 
-Projectile motion is a fundamental concept in classical mechanics that provides critical insight into the behavior of objects moving under the influence of gravity. When an object is launched into the air at an angle, its path forms a curved trajectory, influenced by both its initial velocity and the constant downward acceleration due to gravity. This motion, while idealized in the absence of air resistance and other real-world factors, serves as an essential model for understanding more complex dynamic systems.5
+Projectile motion is a fundamental concept in classical mechanics that provides critical insight into the behavior of objects moving under the influence of gravity. When an object is launched into the air at an angle, its path forms a curved trajectory, influenced by both its initial velocity and the constant downward acceleration due to gravity. This motion, while idealized in the absence of air resistance and other real-world factors, serves as an essential model for understanding more complex dynamic systems.
 
 In this study, we focus on one of the most intriguing aspects of projectile motion: how the horizontal **range** — the total distance a projectile travels before returning to its initial vertical position — varies with the **angle of projection**. This relationship is not only mathematically rich but also visually and intuitively engaging. As the launch angle changes, so does the trajectory, creating a distinct pattern of behavior that reveals underlying physical laws.
 
